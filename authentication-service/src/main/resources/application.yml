@@ -1,0 +1,9 @@
+server:
+  port: 9001
+spring:
+  application:
+    name: auth-service
+
+jwt:
+  secret: 4jE4XcimwrEF9PUiOGaasXROjlw9zpkj5Hr59gojyiE6SMcxDBf9sJu/sCX/eazVrd+TyfYB/e8mz0NmgzuMNYmeb/Cw4aI1wOVgihSrVxT9erUXQXaGD8chY4wdWI9yaZOQKOdHcq8HTLYde3Xum34hgIMG3UJfHIfUNfL0a8Z6YiZGnuEnZrCsmMPTufN0o+pWQk5e7NI7fAgveTBvcV04oLJKK5sjky8a3N9rVPX2XZ6UOsG2n7Cvn/940dpy+DqRPBYCfagUyKNmakjAV2Desn7FkZ7dlGgsZGaWvXm3dhQ1l9TSdZTyx6QlLyaLB95pCDojfwaCYwKTEmj6
+  expiration: 86400000
