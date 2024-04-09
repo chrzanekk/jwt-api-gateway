@@ -13,6 +13,7 @@
         <module>config-service</module>
         <module>authentication-service</module>
         <module>user-service</module>
+        <module>gateway-service</module>
     </modules>
 
     <properties>
