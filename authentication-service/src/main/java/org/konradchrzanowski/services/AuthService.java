@@ -22,6 +22,7 @@ public class AuthService {
         request.setPassword(BCrypt.hashpw(request.getPassword(), BCrypt.gensalt()));
         UserOV registeredUser = restTemplate.postForObject("http://user-service/users", request, UserOV.class);
 
+        assert registeredUser != null;
         String accessToken = jwtUtil.generate(registeredUser.getId(), registeredUser.getRole(), "ACCESS");
         String refreshToken = jwtUtil.generate(registeredUser.getId(), registeredUser.getRole(), "REFRESH");
         return new AuthResponse(accessToken, refreshToken);
