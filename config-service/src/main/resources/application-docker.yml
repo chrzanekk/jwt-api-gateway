@@ -9,5 +9,5 @@ spring:
     config:
       server:
         git:
-          uri: https://github.com/chrzanekk/demo-config-server.git
+          uri: https://github.com/chrzanekk/demo-config-server-docker.git
           clone-on-start: true
