@@ -4,11 +4,7 @@ server:
 spring:
   application:
     name: api-gateway
-  cloud:
-    gateway:
-      discovery:
-        locator:
-          enabled: true
+
 #      routes:
 # todo need to find how to configure routes for gateway for many endpoints and services
 jwt:
