@@ -5,6 +5,19 @@ spring:
   application:
     name: api-gateway
 
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    enabled: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+
+management:
+  zipkin:
+    tracing:
+      endpoint: http://localhost:9941
+
 #      routes:
 # todo need to find how to configure routes for gateway for many endpoints and services
 jwt:

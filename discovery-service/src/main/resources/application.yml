@@ -10,3 +10,8 @@ spring:
     name: discovery-service
   profiles:
     active: default
+
+management:
+  zipkin:
+    tracing:
+      endpoint: http://localhost:9941

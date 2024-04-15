@@ -1,5 +1,5 @@
-spring:
-  cloud:
-    config:
-      enabled: true
-      uri: http://config-service:9297
+#spring:
+#  cloud:
+#    config:
+#      enabled: true
+#      uri: http://config-service:9297

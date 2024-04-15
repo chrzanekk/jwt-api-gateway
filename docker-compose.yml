@@ -29,6 +29,8 @@ services:
       - postgres
     restart: unless-stopped
 
+
+# todo: implement in future
 #  config-service:
 #    image: chrzanekk/config-service
 #    container_name: config-service
@@ -74,6 +76,34 @@ services:
     depends_on:
       - discovery-service
 #      - config-service
+      - zipkin
+
+  user-service:
+    image: chrzanekk/user-service:latest
+    container_name: user-service
+    ports:
+      - "9002:9002"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    networks:
+      - spring
+    depends_on:
+      - discovery-service
+      #      - config-service
+      - zipkin
+
+  auth-service:
+    image: chrzanekk/auth-service:latest
+    container_name: auth-service
+    ports:
+      - "9001:9001"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    networks:
+      - spring
+    depends_on:
+      - discovery-service
+      #      - config-service
       - zipkin
 
 networks:
