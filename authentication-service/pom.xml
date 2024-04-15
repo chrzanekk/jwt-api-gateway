@@ -92,7 +92,11 @@
             <groupId>io.zipkin.reporter2</groupId>
             <artifactId>zipkin-reporter-brave</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>org.konradchrzanowski</groupId>
+            <artifactId>clients</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>

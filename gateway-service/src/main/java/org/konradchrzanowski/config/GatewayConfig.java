@@ -15,7 +15,7 @@ public class GatewayConfig {
     public GatewayConfig(AuthenticationFilter filter) {
         this.filter = filter;
     }
-
+//here we configure all gateway routes for microservices instead of yml file
     @Bean
     public RouteLocator routes(RouteLocatorBuilder builder) {
         return builder.routes()
