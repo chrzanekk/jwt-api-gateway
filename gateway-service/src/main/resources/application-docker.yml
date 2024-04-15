@@ -4,11 +4,20 @@ server:
 spring:
   application:
     name: api-gateway
-  cloud:
-    gateway:
-      discovery:
-        locator:
-          enabled: true
+
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    enabled: true
+    service-url:
+      defaultZone: http://discovery-service:8761/eureka
+
+management:
+  zipkin:
+    tracing:
+      endpoint: http://zipkin:9941
 #      routes:
 # todo need to find how to configure routes for gateway for many endpoints and services
 jwt:

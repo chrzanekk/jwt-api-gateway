@@ -9,3 +9,8 @@ eureka:
 spring:
   application:
     name: discovery-service
+
+management:
+  zipkin:
+    tracing:
+      endpoint: http://zipkin:9941

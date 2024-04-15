@@ -29,18 +29,18 @@ services:
       - postgres
     restart: unless-stopped
 
-  config-service:
-    image: chrzanekk/config-service
-    container_name: config-service
-    environment:
-      - SPRING_PROFILES_ACTIVE=docker
-    ports:
-      - "9297:9297"
-    networks:
-      - spring
-    depends_on:
-      - discovery-service
-      - zipkin
+#  config-service:
+#    image: chrzanekk/config-service
+#    container_name: config-service
+#    environment:
+#      - SPRING_PROFILES_ACTIVE=docker
+#    ports:
+#      - "9297:9297"
+#    networks:
+#      - spring
+#    depends_on:
+#      - discovery-service
+#      - zipkin
 
   zipkin:
     image: openzipkin/zipkin
@@ -73,7 +73,7 @@ services:
       - spring
     depends_on:
       - discovery-service
-      - config-service
+#      - config-service
       - zipkin
 
 networks:
