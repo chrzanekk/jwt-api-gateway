@@ -1,8 +1,8 @@
-package org.konradchrzanowski.controllers;
+package org.konradchrzanowski.user.controllers;
 
 import lombok.AllArgsConstructor;
-import org.konradchrzanowski.entities.UserVO;
-import org.konradchrzanowski.services.UserService;
+import org.konradchrzanowski.user.entities.UserVO;
+import org.konradchrzanowski.user.services.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

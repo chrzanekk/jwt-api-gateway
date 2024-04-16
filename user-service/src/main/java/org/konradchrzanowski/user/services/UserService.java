@@ -1,7 +1,7 @@
-package org.konradchrzanowski.services;
+package org.konradchrzanowski.user.services;
 
 import lombok.AllArgsConstructor;
-import org.konradchrzanowski.entities.UserVO;
+import org.konradchrzanowski.user.entities.UserVO;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;

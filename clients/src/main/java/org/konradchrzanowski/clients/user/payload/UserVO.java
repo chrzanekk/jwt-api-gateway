@@ -1,4 +1,4 @@
-package org.konradchrzanowski.entities;
+package org.konradchrzanowski.clients.user.payload;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
