@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class AuthService {
 
-    //todo check why UserClient have error with autowired
     private final UserClient userClient;
     private final JwtUtil jwtUtil;
 

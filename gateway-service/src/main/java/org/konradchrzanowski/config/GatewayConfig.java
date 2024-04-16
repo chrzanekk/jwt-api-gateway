@@ -22,9 +22,9 @@ public class GatewayConfig {
                 .route("user-service", r -> r.path("/users/**")
                         .filters(f -> f.filter(filter))
                         .uri("lb://user-service"))
-                .route("auth-service", r -> r.path("/auth/**")
+                .route("authentication-service", r -> r.path("/auth/**")
                         .filters(f -> f.filter(filter))
-                        .uri("lb://auth-service"))
+                        .uri("lb://authentication-service"))
                 .build();
     }
 }
