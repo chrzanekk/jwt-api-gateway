@@ -2,7 +2,7 @@ server:
   port: 9001
 spring:
   application:
-    name: auth-service
+    name: authentication-service
   profiles:
     active: default
 

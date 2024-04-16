@@ -28,13 +28,6 @@
         <image>chrzanekk/${project.artifactId}:${project.version}</image>
     </properties>
 
-    <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.2.1</version>
-        <relativePath/>
-    </parent>
-
     <dependencies>
         <dependency>
             <groupId>org.projectlombok</groupId>

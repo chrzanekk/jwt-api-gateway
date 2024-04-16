@@ -92,9 +92,9 @@ services:
       #      - config-service
       - zipkin
 
-  auth-service:
-    image: chrzanekk/auth-service:latest
-    container_name: auth-service
+  authentication-service:
+    image: chrzanekk/authentication-service:latest
+    container_name: authentication-service
     ports:
       - "9001:9001"
     environment:

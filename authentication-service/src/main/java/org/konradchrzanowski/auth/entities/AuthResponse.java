@@ -1,4 +1,4 @@
-package org.konradchrzanowski.entities;
+package org.konradchrzanowski.auth.entities;
 
 import lombok.Data;
 

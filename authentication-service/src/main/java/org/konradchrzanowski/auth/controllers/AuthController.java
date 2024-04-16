@@ -1,9 +1,9 @@
-package org.konradchrzanowski.controllers;
+package org.konradchrzanowski.auth.controllers;
 
 import lombok.AllArgsConstructor;
-import org.konradchrzanowski.entities.AuthRequest;
-import org.konradchrzanowski.entities.AuthResponse;
-import org.konradchrzanowski.services.AuthService;
+import org.konradchrzanowski.auth.services.AuthService;
+import org.konradchrzanowski.auth.entities.AuthRequest;
+import org.konradchrzanowski.auth.entities.AuthResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
