@@ -1,0 +1,52 @@
+server:
+  port: 9003
+
+spring:
+  application:
+    name: email-service
+  profiles:
+    active: default
+
+  datasource:
+    username: ${DEV_DB_USERNAME}
+    password: ${DEV_DB_PASSWORD}
+    url: jdbc:postgresql://${EMAIL_DB_HOST}/sma-db-email
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: false
+        show-sql: true
+
+  mail:
+    host: ${EMAIL_HOST}
+    port: ${EMAIL_PORT}
+    username: ${EMAIL_SEND_LOGIN}
+    password: ${EMAIL_SEND_PASSWORD}
+    protocol: smtp
+  thymeleaf:
+    cache: false
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 20MB
+      max-request-size: 25MB
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    enabled: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+
+management:
+  zipkin:
+    tracing:
+      endpoint: http://localhost:9941
+
+frontend:
+  url: ${FRONTEND_URL}
+  tokenValidityTimeInMinutes: 30

@@ -24,7 +24,7 @@ public class AuthenticationFilter implements GatewayFilter {
         this.validator = validator;
         this.jwtUtils = jwtUtils;
     }
-//this method is used to filter endpoints -> need to implement this wiht standard Authentication Filter?
+//this method is used to filter endpoints -> need to implement this with standard Authentication Filter?
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();

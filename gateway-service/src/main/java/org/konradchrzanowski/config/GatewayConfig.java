@@ -25,6 +25,9 @@ public class GatewayConfig {
                 .route("authentication-service", r -> r.path("/auth/**")
                         .filters(f -> f.filter(filter))
                         .uri("lb://authentication-service"))
+                .route("email-service", r-> r.path("/email/**")
+                        .filters(f-> f.filter(filter))
+                        .uri("lb://email-service"))
                 .build();
     }
 }
