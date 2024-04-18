@@ -3,8 +3,8 @@ package org.konradchrzanowski.email.domain;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.*;
-import org.konradchrzanowski.email.enumeration.Language;
 import org.konradchrzanowski.email.enumeration.MailEvent;
+import org.konradchrzanowski.utils.dictionary.enumeration.Language;
 
 import java.time.LocalDateTime;
 

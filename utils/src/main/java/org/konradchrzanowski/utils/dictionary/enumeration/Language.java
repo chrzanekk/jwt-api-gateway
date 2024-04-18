@@ -1,4 +1,4 @@
-package org.konradchrzanowski.email.enumeration;
+package org.konradchrzanowski.utils.dictionary.enumeration;
 
 import java.util.HashMap;
 import java.util.Map;

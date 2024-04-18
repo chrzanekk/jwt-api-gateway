@@ -1,7 +1,7 @@
 package org.konradchrzanowski.email.service.dto;
 
-import org.konradchrzanowski.email.enumeration.Language;
 import org.konradchrzanowski.email.enumeration.MailEvent;
+import org.konradchrzanowski.utils.dictionary.enumeration.Language;
 
 import java.time.LocalDateTime;
 

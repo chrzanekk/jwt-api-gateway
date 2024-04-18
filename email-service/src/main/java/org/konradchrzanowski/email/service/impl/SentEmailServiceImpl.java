@@ -1,15 +1,19 @@
 package org.konradchrzanowski.email.service.impl;
 
 import org.konradchrzanowski.email.domain.SentEmail;
-import org.konradchrzanowski.email.enumeration.Language;
 import org.konradchrzanowski.email.enumeration.MailEvent;
 import org.konradchrzanowski.email.mapper.SentEmailMapper;
 import org.konradchrzanowski.email.payload.response.MessageResponse;
+import org.konradchrzanowski.email.repository.SentEmailRepository;
+import org.konradchrzanowski.email.service.DictionaryService;
 import org.konradchrzanowski.email.service.EmailSenderService;
 import org.konradchrzanowski.email.service.SentEmailService;
 import org.konradchrzanowski.email.service.dto.ConfirmationToken;
+import org.konradchrzanowski.utils.dictionary.dto.DictionaryDTO;
 import org.konradchrzanowski.email.service.dto.PasswordResetToken;
 import org.konradchrzanowski.email.service.dto.SentEmailDTO;
+import org.konradchrzanowski.utils.dictionary.enumeration.DictionaryType;
+import org.konradchrzanowski.utils.dictionary.enumeration.Language;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -163,8 +167,8 @@ public class SentEmailServiceImpl implements SentEmailService {
         List<DictionaryDTO> list = dictionaryService.getDictionary(DictionaryType.EMAIL_TITLES, locale);
 
         for (DictionaryDTO dictionaryData : list) {
-            if (dictionaryData.getCode().equals(mailEvent.getCode())) {
-                return dictionaryData.getValue();
+            if (dictionaryData.code().equals(mailEvent.getCode())) {
+                return dictionaryData.value();
             }
         }
 
