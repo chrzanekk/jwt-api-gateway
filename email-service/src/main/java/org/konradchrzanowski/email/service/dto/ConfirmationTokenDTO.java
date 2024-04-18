@@ -2,7 +2,7 @@ package org.konradchrzanowski.email.service.dto;
 
 import java.time.LocalDateTime;
 
-public record ConfirmationToken(
+public record ConfirmationTokenDTO(
         Long id,
         String confirmationToken,
         Long userId,

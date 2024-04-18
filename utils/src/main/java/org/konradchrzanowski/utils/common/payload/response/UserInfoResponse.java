@@ -1,4 +1,4 @@
-package org.konradchrzanowski.user.payload.response;
+package org.konradchrzanowski.utils.common.payload.response;
 
 
 import org.konradchrzanowski.utils.common.enumeration.ERole;

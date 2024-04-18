@@ -1,4 +1,4 @@
-package org.konradchrzanowski.email.payload.response;
+package org.konradchrzanowski.utils.common.payload.response;
 
 public class MessageResponse {
     private String message;

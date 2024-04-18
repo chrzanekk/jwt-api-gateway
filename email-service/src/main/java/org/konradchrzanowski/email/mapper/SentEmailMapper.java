@@ -5,6 +5,7 @@ import org.konradchrzanowski.email.service.dto.SentEmailDTO;
 import org.konradchrzanowski.utils.mapper.EntityMapper;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
 import java.util.List;
 @Component
 public class SentEmailMapper implements EntityMapper<SentEmailDTO, SentEmail> {
@@ -44,7 +45,7 @@ public class SentEmailMapper implements EntityMapper<SentEmailDTO, SentEmail> {
     @Override
     public List<SentEmail> toEntity(List<SentEmailDTO> dtoList) {
         if (dtoList == null || dtoList.isEmpty()) {
-            return List.of();
+            return Collections.emptyList();
         }
         return dtoList.stream().map(this::toEntity).toList();
     }
@@ -52,7 +53,7 @@ public class SentEmailMapper implements EntityMapper<SentEmailDTO, SentEmail> {
     @Override
     public List<SentEmailDTO> toDto(List<SentEmail> entityList) {
         if (entityList == null || entityList.isEmpty()) {
-            return List.of();
+            return Collections.emptyList();
         }
         return entityList.stream().map(this::toDto).toList();
     }

@@ -3,14 +3,14 @@ package org.konradchrzanowski.email.service.impl;
 import org.konradchrzanowski.email.domain.SentEmail;
 import org.konradchrzanowski.email.enumeration.MailEvent;
 import org.konradchrzanowski.email.mapper.SentEmailMapper;
-import org.konradchrzanowski.email.payload.response.MessageResponse;
 import org.konradchrzanowski.email.repository.SentEmailRepository;
 import org.konradchrzanowski.email.service.DictionaryService;
 import org.konradchrzanowski.email.service.EmailSenderService;
 import org.konradchrzanowski.email.service.SentEmailService;
-import org.konradchrzanowski.email.service.dto.ConfirmationToken;
+import org.konradchrzanowski.email.service.dto.ConfirmationTokenDTO;
+import org.konradchrzanowski.utils.common.payload.response.MessageResponse;
 import org.konradchrzanowski.utils.dictionary.dto.DictionaryDTO;
-import org.konradchrzanowski.email.service.dto.PasswordResetToken;
+import org.konradchrzanowski.email.service.dto.PasswordResetTokenDTO;
 import org.konradchrzanowski.email.service.dto.SentEmailDTO;
 import org.konradchrzanowski.utils.dictionary.enumeration.DictionaryType;
 import org.konradchrzanowski.utils.dictionary.enumeration.Language;
@@ -58,12 +58,12 @@ public class SentEmailServiceImpl implements SentEmailService {
     }
 
     @Override
-    public MessageResponse sendAfterRegistration(ConfirmationToken confirmationToken, Locale locale) {
-        log.debug("Request to send email to confirm user registration: {}", confirmationToken.email());
+    public MessageResponse sendAfterRegistration(ConfirmationTokenDTO confirmationTokenDTO, Locale locale) {
+        log.debug("Request to send email to confirm user registration: {}", confirmationTokenDTO.email());
         Context context = new Context(locale);
         context.setVariable(LOGIN_PAGE_URL, scaffoldingAppUrl + "/account/login");
         context.setVariable("emailConfirmationLink",
-                scaffoldingAppUrl + "/confirm?token=" + confirmationToken.confirmationToken());
+                scaffoldingAppUrl + "/confirm?token=" + confirmationTokenDTO.confirmationToken());
         context.setVariable("tokenValidityTime", tokenValidityTimeInMinutes);
         //template to send as string
         String content = templateEngine.process("mail-after-registration", context);
@@ -71,8 +71,8 @@ public class SentEmailServiceImpl implements SentEmailService {
 
         SentEmailDTO emailDTO = new SentEmailDTO(
                 null,
-                confirmationToken.userId(),
-                confirmationToken.email(),
+                confirmationTokenDTO.userId(),
+                confirmationTokenDTO.email(),
                 title,
                 content,
                 MailEvent.AFTER_REGISTRATION,
@@ -88,7 +88,7 @@ public class SentEmailServiceImpl implements SentEmailService {
     }
 
     @Override
-    public MessageResponse sendAfterEmailConfirmation(ConfirmationToken confirmationToken, Locale locale) {
+    public MessageResponse sendAfterEmailConfirmation(ConfirmationTokenDTO confirmationTokenDTO, Locale locale) {
         log.debug("Request to send email to confirm user activation:");
         Context context = new Context(locale);
         context.setVariable(LOGIN_PAGE_URL, scaffoldingAppUrl + "/account/login");
@@ -97,8 +97,8 @@ public class SentEmailServiceImpl implements SentEmailService {
         String title = chooseTitle(MailEvent.AFTER_CONFIRMATION, locale);
         SentEmailDTO emailDTO = new SentEmailDTO(
                 null,
-                confirmationToken.userId(),
-                confirmationToken.email(),
+                confirmationTokenDTO.userId(),
+                confirmationTokenDTO.email(),
                 title,
                 content,
                 MailEvent.AFTER_CONFIRMATION,
@@ -112,20 +112,20 @@ public class SentEmailServiceImpl implements SentEmailService {
     }
 
     @Override
-    public MessageResponse sendPasswordResetMail(PasswordResetToken passwordResetToken, Locale locale) {
+    public MessageResponse sendPasswordResetMail(PasswordResetTokenDTO passwordResetTokenDTO, Locale locale) {
         log.debug("Request to send email to reset password");
         Context context = new Context(locale);
         context.setVariable(LOGIN_PAGE_URL, scaffoldingAppUrl + "/account/login");
         context.setVariable("passwordResetLink",
-                scaffoldingAppUrl + "/account/password-reset?token=" + passwordResetToken.passwordResetToken());
+                scaffoldingAppUrl + "/account/password-reset?token=" + passwordResetTokenDTO.passwordResetToken());
         context.setVariable("tokenValidityTime", tokenValidityTimeInMinutes);
         String content = templateEngine.process("mail-password-reset", context);
         String title = chooseTitle(MailEvent.PASSWORD_RESET, locale);
 
         SentEmailDTO emailDTO = new SentEmailDTO(
                 null,
-                passwordResetToken.userId(),
-                passwordResetToken.email(),
+                passwordResetTokenDTO.userId(),
+                passwordResetTokenDTO.email(),
                 title,
                 content,
                 MailEvent.PASSWORD_RESET,
@@ -135,11 +135,11 @@ public class SentEmailServiceImpl implements SentEmailService {
         emailSenderService.sendEmail(emailDTO);
         SentEmail sentEmail = sentEmailMapper.toEntity(emailDTO);
         sentEmailRepository.save(sentEmail);
-        return new MessageResponse("Password reset token sent with token: " + passwordResetToken.passwordResetToken());
+        return new MessageResponse("Password reset token sent with token: " + passwordResetTokenDTO.passwordResetToken());
     }
 
     @Override
-    public MessageResponse sendAfterPasswordChange(PasswordResetToken passwordResetToken, Locale locale) {
+    public MessageResponse sendAfterPasswordChange(PasswordResetTokenDTO passwordResetTokenDTO, Locale locale) {
         log.debug("Request to send email to confirm password reset.");
         Context context = new Context(locale);
         context.setVariable(LOGIN_PAGE_URL, scaffoldingAppUrl + "/account/login");
@@ -148,8 +148,8 @@ public class SentEmailServiceImpl implements SentEmailService {
         String title = chooseTitle(MailEvent.AFTER_PASSWORD_CHANGE, locale);
         SentEmailDTO emailDTO = new SentEmailDTO(
                 null,
-                passwordResetToken.userId(),
-                passwordResetToken.email(),
+                passwordResetTokenDTO.userId(),
+                passwordResetTokenDTO.email(),
                 title,
                 content,
                 MailEvent.AFTER_PASSWORD_CHANGE,

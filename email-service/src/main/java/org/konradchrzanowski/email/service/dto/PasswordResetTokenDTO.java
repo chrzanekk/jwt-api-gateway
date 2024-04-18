@@ -2,7 +2,7 @@ package org.konradchrzanowski.email.service.dto;
 
 import java.time.LocalDateTime;
 
-public record PasswordResetToken(
+public record PasswordResetTokenDTO(
         Long id,
         String passwordResetToken,
         Long userId,
