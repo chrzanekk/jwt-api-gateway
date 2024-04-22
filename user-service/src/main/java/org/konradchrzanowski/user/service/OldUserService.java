@@ -1,4 +1,4 @@
-package org.konradchrzanowski.user.services;
+package org.konradchrzanowski.user.service;
 
 import lombok.AllArgsConstructor;
 import org.konradchrzanowski.user.entities.UserVO;
@@ -8,7 +8,7 @@ import java.util.Date;
 
 @Service
 @AllArgsConstructor
-public class UserService {
+public class OldUserService {
     public UserVO save(UserVO userVO) {
 
         String userId = String.valueOf(new Date().getTime());

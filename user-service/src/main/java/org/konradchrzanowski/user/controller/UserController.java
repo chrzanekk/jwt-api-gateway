@@ -1,8 +1,8 @@
-package org.konradchrzanowski.user.controllers;
+package org.konradchrzanowski.user.controller;
 
 import lombok.AllArgsConstructor;
 import org.konradchrzanowski.user.entities.UserVO;
-import org.konradchrzanowski.user.services.UserService;
+import org.konradchrzanowski.user.service.OldUserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,11 +11,11 @@ import org.springframework.web.bind.annotation.*;
 @AllArgsConstructor
 public class UserController {
 
-    private final UserService userService;
+    private final OldUserService oldUserService;
 
     @PostMapping
     public ResponseEntity<UserVO> save(@RequestBody UserVO userVO) {
-        return ResponseEntity.ok(userService.save(userVO));
+        return ResponseEntity.ok(oldUserService.save(userVO));
     }
 
     @GetMapping("/secured")

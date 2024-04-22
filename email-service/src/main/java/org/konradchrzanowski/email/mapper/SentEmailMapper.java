@@ -7,6 +7,9 @@ import org.springframework.stereotype.Component;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 @Component
 public class SentEmailMapper implements EntityMapper<SentEmailDTO, SentEmail> {
     @Override
@@ -56,5 +59,21 @@ public class SentEmailMapper implements EntityMapper<SentEmailDTO, SentEmail> {
             return Collections.emptyList();
         }
         return entityList.stream().map(this::toDto).toList();
+    }
+
+    @Override
+    public Set<SentEmail> toEntity(Set<SentEmailDTO> dtoSet) {
+        if(dtoSet == null || dtoSet.isEmpty()) {
+            return Collections.emptySet();
+        }
+        return dtoSet.stream().map(this::toEntity).collect(Collectors.toSet());
+    }
+
+    @Override
+    public Set<SentEmailDTO> toDto(Set<SentEmail> entitySet) {
+        if (entitySet == null || entitySet.isEmpty()) {
+            return Collections.emptySet();
+        }
+        return entitySet.stream().map(this::toDto).collect(Collectors.toSet());
     }
 }

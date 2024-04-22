@@ -8,11 +8,10 @@ import org.konradchrzanowski.email.service.DictionaryService;
 import org.konradchrzanowski.email.service.EmailSenderService;
 import org.konradchrzanowski.email.service.SentEmailService;
 import org.konradchrzanowski.email.service.dto.ConfirmationTokenDTO;
-import org.konradchrzanowski.utils.common.payload.response.MessageResponse;
-import org.konradchrzanowski.utils.common.payload.response.SentEmailResponse;
-import org.konradchrzanowski.utils.dictionary.dto.DictionaryDTO;
 import org.konradchrzanowski.email.service.dto.PasswordResetTokenDTO;
 import org.konradchrzanowski.email.service.dto.SentEmailDTO;
+import org.konradchrzanowski.utils.common.payload.response.SentEmailResponse;
+import org.konradchrzanowski.utils.dictionary.dto.DictionaryDTO;
 import org.konradchrzanowski.utils.dictionary.enumeration.DictionaryType;
 import org.konradchrzanowski.utils.dictionary.enumeration.Language;
 import org.slf4j.Logger;
@@ -109,7 +108,7 @@ public class SentEmailServiceImpl implements SentEmailService {
         emailSenderService.sendEmail(emailDTO);
         SentEmail sentEmail = sentEmailMapper.toEntity(emailDTO);
         sentEmailRepository.save(sentEmail);
-        return new SentEmailResponse("Register successful",true);
+        return new SentEmailResponse("Register successful", true);
     }
 
     @Override
@@ -136,7 +135,7 @@ public class SentEmailServiceImpl implements SentEmailService {
         emailSenderService.sendEmail(emailDTO);
         SentEmail sentEmail = sentEmailMapper.toEntity(emailDTO);
         sentEmailRepository.save(sentEmail);
-        return new SentEmailResponse("Password reset token sent with token: " + passwordResetTokenDTO.passwordResetToken() ,true);
+        return new SentEmailResponse("Password reset token sent with token: " + passwordResetTokenDTO.passwordResetToken(), true);
     }
 
     @Override
