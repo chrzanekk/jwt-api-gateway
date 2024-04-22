@@ -9,6 +9,7 @@ import org.konradchrzanowski.email.service.EmailSenderService;
 import org.konradchrzanowski.email.service.SentEmailService;
 import org.konradchrzanowski.email.service.dto.ConfirmationTokenDTO;
 import org.konradchrzanowski.utils.common.payload.response.MessageResponse;
+import org.konradchrzanowski.utils.common.payload.response.SentEmailResponse;
 import org.konradchrzanowski.utils.dictionary.dto.DictionaryDTO;
 import org.konradchrzanowski.email.service.dto.PasswordResetTokenDTO;
 import org.konradchrzanowski.email.service.dto.SentEmailDTO;
@@ -58,7 +59,7 @@ public class SentEmailServiceImpl implements SentEmailService {
     }
 
     @Override
-    public MessageResponse sendAfterRegistration(ConfirmationTokenDTO confirmationTokenDTO, Locale locale) {
+    public SentEmailResponse sendAfterRegistration(ConfirmationTokenDTO confirmationTokenDTO, Locale locale) {
         log.debug("Request to send email to confirm user registration: {}", confirmationTokenDTO.email());
         Context context = new Context(locale);
         context.setVariable(LOGIN_PAGE_URL, scaffoldingAppUrl + "/account/login");
@@ -84,11 +85,11 @@ public class SentEmailServiceImpl implements SentEmailService {
         SentEmail sentEmail = sentEmailMapper.toEntity(emailDTO);
 
         sentEmailRepository.save(sentEmail);
-        return new MessageResponse("Register successful");
+        return new SentEmailResponse("Register successful", true);
     }
 
     @Override
-    public MessageResponse sendAfterEmailConfirmation(ConfirmationTokenDTO confirmationTokenDTO, Locale locale) {
+    public SentEmailResponse sendAfterEmailConfirmation(ConfirmationTokenDTO confirmationTokenDTO, Locale locale) {
         log.debug("Request to send email to confirm user activation:");
         Context context = new Context(locale);
         context.setVariable(LOGIN_PAGE_URL, scaffoldingAppUrl + "/account/login");
@@ -108,11 +109,11 @@ public class SentEmailServiceImpl implements SentEmailService {
         emailSenderService.sendEmail(emailDTO);
         SentEmail sentEmail = sentEmailMapper.toEntity(emailDTO);
         sentEmailRepository.save(sentEmail);
-        return new MessageResponse("Register successful");
+        return new SentEmailResponse("Register successful",true);
     }
 
     @Override
-    public MessageResponse sendPasswordResetMail(PasswordResetTokenDTO passwordResetTokenDTO, Locale locale) {
+    public SentEmailResponse sendPasswordResetMail(PasswordResetTokenDTO passwordResetTokenDTO, Locale locale) {
         log.debug("Request to send email to reset password");
         Context context = new Context(locale);
         context.setVariable(LOGIN_PAGE_URL, scaffoldingAppUrl + "/account/login");
@@ -135,11 +136,11 @@ public class SentEmailServiceImpl implements SentEmailService {
         emailSenderService.sendEmail(emailDTO);
         SentEmail sentEmail = sentEmailMapper.toEntity(emailDTO);
         sentEmailRepository.save(sentEmail);
-        return new MessageResponse("Password reset token sent with token: " + passwordResetTokenDTO.passwordResetToken());
+        return new SentEmailResponse("Password reset token sent with token: " + passwordResetTokenDTO.passwordResetToken() ,true);
     }
 
     @Override
-    public MessageResponse sendAfterPasswordChange(PasswordResetTokenDTO passwordResetTokenDTO, Locale locale) {
+    public SentEmailResponse sendAfterPasswordChange(PasswordResetTokenDTO passwordResetTokenDTO, Locale locale) {
         log.debug("Request to send email to confirm password reset.");
         Context context = new Context(locale);
         context.setVariable(LOGIN_PAGE_URL, scaffoldingAppUrl + "/account/login");
@@ -159,7 +160,7 @@ public class SentEmailServiceImpl implements SentEmailService {
         emailSenderService.sendEmail(emailDTO);
         SentEmail sentEmail = sentEmailMapper.toEntity(emailDTO);
         sentEmailRepository.save(sentEmail);
-        return new MessageResponse("Password changed successfully");
+        return new SentEmailResponse("Password changed successfully", true);
     }
 
     private String chooseTitle(MailEvent mailEvent, Locale locale) {

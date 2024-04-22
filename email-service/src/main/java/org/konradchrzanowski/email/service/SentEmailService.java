@@ -3,15 +3,16 @@ package org.konradchrzanowski.email.service;
 import org.konradchrzanowski.email.service.dto.ConfirmationTokenDTO;
 import org.konradchrzanowski.email.service.dto.PasswordResetTokenDTO;
 import org.konradchrzanowski.utils.common.payload.response.MessageResponse;
+import org.konradchrzanowski.utils.common.payload.response.SentEmailResponse;
 
 import java.util.Locale;
 
 public interface SentEmailService {
-    MessageResponse sendAfterRegistration(ConfirmationTokenDTO confirmationTokenDTO, Locale locale);
+    SentEmailResponse sendAfterRegistration(ConfirmationTokenDTO confirmationTokenDTO, Locale locale);
 
-    MessageResponse sendAfterEmailConfirmation(ConfirmationTokenDTO confirmationTokenDTO, Locale locale);
+    SentEmailResponse sendAfterEmailConfirmation(ConfirmationTokenDTO confirmationTokenDTO, Locale locale);
 
-    MessageResponse sendAfterPasswordChange(PasswordResetTokenDTO passwordResetTokenDTO, Locale locale);
+    SentEmailResponse sendAfterPasswordChange(PasswordResetTokenDTO passwordResetTokenDTO, Locale locale);
 
-    MessageResponse sendPasswordResetMail(PasswordResetTokenDTO passwordResetTokenDTO, Locale locale);
+    SentEmailResponse sendPasswordResetMail(PasswordResetTokenDTO passwordResetTokenDTO, Locale locale);
 }

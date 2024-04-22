@@ -1,5 +1,6 @@
 package org.konradchrzanowski.utils.token;
 
+import org.konradchrzanowski.utils.common.payload.response.SentEmailResponse;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -7,9 +8,11 @@ import java.time.LocalDateTime;
 @Component
 public class TokenUtil {
 
-    public static void validateTokenTime(LocalDateTime createDate, Long tokenValidityInMinutes) {
+    public static SentEmailResponse validateTokenTime(LocalDateTime createDate, Long tokenValidityInMinutes) {
         if (LocalDateTime.now().isAfter(createDate.plusMinutes(tokenValidityInMinutes))) {
-            throw new ExpiredTokenException("Token expired");
+            return new SentEmailResponse("Token expired", false);
+        } else {
+            return new SentEmailResponse("Token valid", true);
         }
     }
 }
