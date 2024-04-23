@@ -1,6 +1,6 @@
-package org.konradchrzanowski.email.service;
+package org.konradchrzanowski.token.service;
 
-import org.konradchrzanowski.email.service.dto.ConfirmationTokenDTO;
+import org.konradchrzanowski.utils.common.dto.ConfirmationTokenDTO;
 import org.konradchrzanowski.utils.common.dto.UserDTO;
 
 

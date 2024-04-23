@@ -1,7 +1,7 @@
-package org.konradchrzanowski.email.repository;
+package org.konradchrzanowski.token.repository;
 
 
-import org.konradchrzanowski.email.domain.ConfirmationToken;
+import org.konradchrzanowski.token.domain.ConfirmationToken;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

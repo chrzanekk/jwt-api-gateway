@@ -1,4 +1,4 @@
-package org.konradchrzanowski.email.exception;
+package org.konradchrzanowski.token.exception;
 
 public class TokenNotFoundException extends RuntimeException {
 

@@ -1,6 +1,5 @@
 package org.konradchrzanowski.email.controller;
 
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.konradchrzanowski.email.service.ConfirmationTokenService;
 import org.konradchrzanowski.email.service.PasswordResetTokenService;
@@ -21,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Locale;
 
 @Slf4j
-@AllArgsConstructor
 @RestController
 @RequestMapping(path = "/api/sendemail")
 public class SentEmailController {
@@ -33,9 +31,15 @@ public class SentEmailController {
     private final PasswordResetTokenService passwordResetTokenService;
     private final ConfirmationTokenService confirmationTokenService;
 
+    public SentEmailController(SentEmailService sentEmailService, PasswordResetTokenService passwordResetTokenService, ConfirmationTokenService confirmationTokenService) {
+        this.sentEmailService = sentEmailService;
+        this.passwordResetTokenService = passwordResetTokenService;
+        this.confirmationTokenService = confirmationTokenService;
+    }
+
 
     @PostMapping(path = "/after-registration")
-    public ResponseEntity<SentEmailResponse> sendEmailAfterRegistration(UserDTO userDTO) {
+    public ResponseEntity<SentEmailResponse> sendEmailAfterRegistration(@RequestBody UserDTO userDTO) {
         String generatedToken = confirmationTokenService.generateToken();
         ConfirmationTokenDTO confirmationTokenDTO = confirmationTokenService.saveToken(generatedToken, userDTO);
         SentEmailResponse messageResponse = sentEmailService.sendAfterRegistration(confirmationTokenDTO, new Locale(Language.POLISH.getCode()));

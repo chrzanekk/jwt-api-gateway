@@ -1,7 +1,7 @@
-package org.konradchrzanowski.email.mapper;
+package org.konradchrzanowski.token.mapper;
 
-import org.konradchrzanowski.email.domain.PasswordResetToken;
-import org.konradchrzanowski.email.service.dto.PasswordResetTokenDTO;
+import org.konradchrzanowski.token.domain.PasswordResetToken;
+import org.konradchrzanowski.utils.common.dto.PasswordResetTokenDTO;
 import org.konradchrzanowski.utils.mapper.EntityMapper;
 import org.springframework.stereotype.Component;
 

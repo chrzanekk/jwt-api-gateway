@@ -1,7 +1,8 @@
-package org.konradchrzanowski.email.mapper;
+package org.konradchrzanowski.token.mapper;
 
-import org.konradchrzanowski.email.domain.ConfirmationToken;
-import org.konradchrzanowski.email.service.dto.ConfirmationTokenDTO;
+
+import org.konradchrzanowski.token.domain.ConfirmationToken;
+import org.konradchrzanowski.utils.common.dto.ConfirmationTokenDTO;
 import org.konradchrzanowski.utils.mapper.EntityMapper;
 import org.springframework.stereotype.Component;
 
@@ -24,7 +25,7 @@ public class ConfirmationTokenMapper implements EntityMapper<ConfirmationTokenDT
                 .userEmail(dto.email())
                 .createDate(dto.createDate())
                 .expireDate(dto.expireDate())
-                .confirmDate(dto.confirmDat()).build();
+                .confirmDate(dto.confirmDate()).build();
     }
 
     @Override

@@ -1,9 +1,7 @@
 package org.konradchrzanowski.email.service.impl;
 
 
-import org.konradchrzanowski.email.domain.ConfirmationToken;
 import org.konradchrzanowski.email.exception.ObjectNotFoundException;
-import org.konradchrzanowski.email.mapper.ConfirmationTokenMapper;
 import org.konradchrzanowski.email.repository.ConfirmationTokenRepository;
 import org.konradchrzanowski.email.service.ConfirmationTokenService;
 import org.konradchrzanowski.email.service.dto.ConfirmationTokenDTO;

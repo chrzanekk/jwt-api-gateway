@@ -1,4 +1,4 @@
-package org.konradchrzanowski.email.domain;
+package org.konradchrzanowski.token.domain;
 
 import jakarta.persistence.*;
 import lombok.*;

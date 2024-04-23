@@ -1,8 +1,6 @@
 package org.konradchrzanowski.email.service.impl;
 
-import org.konradchrzanowski.email.domain.PasswordResetToken;
 import org.konradchrzanowski.email.exception.ObjectNotFoundException;
-import org.konradchrzanowski.email.mapper.PasswordResetTokenMapper;
 import org.konradchrzanowski.email.repository.PasswordResetTokenRepository;
 import org.konradchrzanowski.email.service.PasswordResetTokenService;
 import org.konradchrzanowski.email.service.dto.PasswordResetTokenDTO;

@@ -171,6 +171,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserInfoResponse getUserWithAuthorities() {
+        //todo need to implement somewhere this SecurityUtils
         String currentLogin = SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new UsernameNotFoundException("User not found"));
         User currentUser = userRepository.findByUsername(currentLogin).orElseThrow(() -> new UsernameNotFoundException("User not found"));
         List<ERole> currentRoles = currentUser.getRoles().stream().map(Role::getName).toList();

@@ -1,7 +1,6 @@
-package org.konradchrzanowski.email.service;
+package org.konradchrzanowski.token.service;
 
-
-import org.konradchrzanowski.email.service.dto.PasswordResetTokenDTO;
+import org.konradchrzanowski.utils.common.dto.PasswordResetTokenDTO;
 import org.konradchrzanowski.utils.common.dto.UserDTO;
 
 public interface PasswordResetTokenService {
