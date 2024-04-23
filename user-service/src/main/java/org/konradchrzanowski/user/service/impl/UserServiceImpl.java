@@ -3,6 +3,7 @@ package org.konradchrzanowski.user.service.impl;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.konradchrzanowski.clients.token.TokenClient;
 import org.konradchrzanowski.user.domain.User;
 import org.konradchrzanowski.user.mapper.UserMapper;
 import org.konradchrzanowski.user.repository.RoleRepository;
@@ -31,7 +32,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-@AllArgsConstructor
 @Log4j2
 @Service
 @Transactional
@@ -46,10 +46,19 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
 
     private final RoleService roleService;
-    //todo inject confirmationTokenService client from auth-service
-//    private final ConfirmationTokenService confirmationTokenService;
+
+    private final TokenClient tokenClient;
 
     private final PasswordEncoder encoder;
+
+    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, UserMapper userMapper, RoleService roleService, TokenClient tokenClient, PasswordEncoder encoder) {
+        this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
+        this.userMapper = userMapper;
+        this.roleService = roleService;
+        this.tokenClient = tokenClient;
+        this.encoder = encoder;
+    }
 
 
     @Override
@@ -88,7 +97,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public String confirm(String token) {
-        ConfirmationTokenDTO confirmationTokenDTO = confirmationTokenService.getConfirmationToken(token);
+        ConfirmationTokenDTO confirmationTokenDTO = tokenClient.getConfirmationTokenByToken(token).getBody();
+        assert confirmationTokenDTO != null;
         if (confirmationTokenDTO.confirmDate() != null) {
             throw new IllegalStateException("Email already confirmed");
         }
@@ -98,7 +108,7 @@ public class UserServiceImpl implements UserService {
             throw new IllegalStateException("Token expired.");
         }
 
-        ConfirmationTokenDTO confirmedDTO = confirmationTokenService.updateToken(confirmationTokenDTO);
+        ConfirmationTokenDTO confirmedDTO = tokenClient.updateConfirmationToken(confirmationTokenDTO).getBody();
         UserDTO user = getUser(confirmedDTO.email());
         update(UserDTO.builder(user).enabled(true).locked(false).build());
         return "Confirmed at" + confirmedDTO.confirmDate().toString();

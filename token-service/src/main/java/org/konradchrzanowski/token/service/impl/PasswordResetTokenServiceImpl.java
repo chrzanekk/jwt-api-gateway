@@ -1,9 +1,11 @@
-package org.konradchrzanowski.email.service.impl;
+package org.konradchrzanowski.token.service.impl;
 
-import org.konradchrzanowski.email.exception.ObjectNotFoundException;
-import org.konradchrzanowski.email.repository.PasswordResetTokenRepository;
-import org.konradchrzanowski.email.service.PasswordResetTokenService;
-import org.konradchrzanowski.email.service.dto.PasswordResetTokenDTO;
+import org.konradchrzanowski.token.domain.PasswordResetToken;
+import org.konradchrzanowski.token.exception.ObjectNotFoundException;
+import org.konradchrzanowski.token.mapper.PasswordResetTokenMapper;
+import org.konradchrzanowski.token.repository.PasswordResetTokenRepository;
+import org.konradchrzanowski.token.service.PasswordResetTokenService;
+import org.konradchrzanowski.utils.common.dto.PasswordResetTokenDTO;
 import org.konradchrzanowski.utils.common.dto.UserDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,7 +70,7 @@ public class PasswordResetTokenServiceImpl implements PasswordResetTokenService 
     }
 
     @Override
-    public PasswordResetTokenDTO get(String token) {
+    public PasswordResetTokenDTO getPasswordResetToken(String token) {
         log.debug("Request to get password reset token data: {}", token);
         return passwordResetTokenRepository.findByPasswordResetToken(token).map(passwordResetTokenMapper::toDto)
                 .orElseThrow(() -> new ObjectNotFoundException("Token not found"));

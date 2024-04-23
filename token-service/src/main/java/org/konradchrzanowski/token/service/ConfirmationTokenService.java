@@ -6,11 +6,11 @@ import org.konradchrzanowski.utils.common.dto.UserDTO;
 
 public interface ConfirmationTokenService {
 
-    String generateToken();
+    String generate();
 
-    ConfirmationTokenDTO saveToken(String token, UserDTO userDTO);
+    ConfirmationTokenDTO save(String token, UserDTO userDTO);
 
-    ConfirmationTokenDTO updateToken(ConfirmationTokenDTO confirmationTokenDTO);
+    ConfirmationTokenDTO update(ConfirmationTokenDTO confirmationTokenDTO);
 
     ConfirmationTokenDTO getConfirmationToken(String token);
 

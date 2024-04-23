@@ -1,10 +1,12 @@
-package org.konradchrzanowski.email.service.impl;
+package org.konradchrzanowski.token.service.impl;
 
 
-import org.konradchrzanowski.email.exception.ObjectNotFoundException;
-import org.konradchrzanowski.email.repository.ConfirmationTokenRepository;
-import org.konradchrzanowski.email.service.ConfirmationTokenService;
-import org.konradchrzanowski.email.service.dto.ConfirmationTokenDTO;
+import org.konradchrzanowski.token.domain.ConfirmationToken;
+import org.konradchrzanowski.token.exception.ObjectNotFoundException;
+import org.konradchrzanowski.token.mapper.ConfirmationTokenMapper;
+import org.konradchrzanowski.token.repository.ConfirmationTokenRepository;
+import org.konradchrzanowski.token.service.ConfirmationTokenService;
+import org.konradchrzanowski.utils.common.dto.ConfirmationTokenDTO;
 import org.konradchrzanowski.utils.common.dto.UserDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,7 +32,7 @@ public class ConfirmationTokenServiceImpl implements ConfirmationTokenService {
     }
 
     @Override
-    public ConfirmationTokenDTO saveToken(String token, UserDTO userDTO) {
+    public ConfirmationTokenDTO save(String token, UserDTO userDTO) {
         log.debug("Request to save token to confirm user registration: {}", token);
         ConfirmationTokenDTO confirmationTokenDTO = new ConfirmationTokenDTO(null,
                 token,
@@ -46,7 +48,7 @@ public class ConfirmationTokenServiceImpl implements ConfirmationTokenService {
     }
 
     @Override
-    public ConfirmationTokenDTO updateToken(ConfirmationTokenDTO confirmationTokenDTO) {
+    public ConfirmationTokenDTO update(ConfirmationTokenDTO confirmationTokenDTO) {
         log.debug("Request to update confirmed token: {}", confirmationTokenDTO.confirmationToken());
         ConfirmationToken confirmed = confirmationTokenRepository.save(
                 confirmationTokenMapper.toEntity(new ConfirmationTokenDTO(
@@ -76,7 +78,7 @@ public class ConfirmationTokenServiceImpl implements ConfirmationTokenService {
     }
 
     @Override
-    public String generateToken() {
+    public String generate() {
         log.debug("Request to generate confirmation token");
         return UUID.randomUUID().toString();
     }

@@ -1,11 +1,9 @@
 server:
-  port: 9004
+  port: 9003
 
 spring:
   application:
-    name: token-service
-  profiles:
-    active: default
+    name: email-service
   datasource:
     username: ${DEV_DB_USERNAME}
     password: ${DEV_DB_PASSWORD}
@@ -19,17 +17,34 @@ spring:
         format_sql: false
         show-sql: true
 
+  mail:
+    host: ${EMAIL_HOST}
+    port: ${EMAIL_PORT}
+    username: ${EMAIL_SEND_LOGIN}
+    password: ${EMAIL_SEND_PASSWORD}
+    protocol: smtp
+  thymeleaf:
+    cache: false
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 20MB
+      max-request-size: 25MB
+
 eureka:
   client:
     register-with-eureka: true
     fetch-registry: true
     enabled: true
     service-url:
-      defaultZone: http://localhost:8761/eureka
+      defaultZone: http://discovery-service:8761/eureka
 
 management:
   zipkin:
     tracing:
-      endpoint: http://localhost:9941
+      endpoint: http://zipkin:9941
+
+frontend:
+  url: ${FRONTEND_URL}
 
 tokenValidityTimeInMinutes: 30

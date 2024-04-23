@@ -12,10 +12,8 @@ public class OldUserService {
     public UserVO save(UserVO userVO) {
 
         String userId = String.valueOf(new Date().getTime());
-        userVO.setId(userId);
-        userVO.setRole("USER");
 
-        return userVO;
+        return new UserVO(userId, userVO.getEmail(), userVO.getPassword(), "USER");
     }
 
 }

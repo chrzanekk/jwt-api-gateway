@@ -1,7 +1,8 @@
 package org.konradchrzanowski.email.service;
 
-import org.konradchrzanowski.email.service.dto.ConfirmationTokenDTO;
-import org.konradchrzanowski.email.service.dto.PasswordResetTokenDTO;
+
+import org.konradchrzanowski.utils.common.dto.ConfirmationTokenDTO;
+import org.konradchrzanowski.utils.common.dto.PasswordResetTokenDTO;
 import org.konradchrzanowski.utils.common.payload.response.SentEmailResponse;
 
 import java.util.Locale;

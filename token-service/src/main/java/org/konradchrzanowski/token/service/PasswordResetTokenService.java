@@ -11,7 +11,7 @@ public interface PasswordResetTokenService {
 
     PasswordResetTokenDTO update(PasswordResetTokenDTO passwordResetTokenDTO);
 
-    PasswordResetTokenDTO get(String token);
+    PasswordResetTokenDTO getPasswordResetToken(String token);
 
     void delete(Long id);
 }

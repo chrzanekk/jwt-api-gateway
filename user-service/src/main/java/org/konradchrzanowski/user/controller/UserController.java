@@ -1,6 +1,7 @@
 package org.konradchrzanowski.user.controller;
 
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.konradchrzanowski.user.entities.UserVO;
 import org.konradchrzanowski.user.service.OldUserService;
 import org.springframework.http.ResponseEntity;
@@ -8,10 +9,13 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "/users")
-@AllArgsConstructor
 public class UserController {
 
     private final OldUserService oldUserService;
+
+    public UserController(OldUserService oldUserService) {
+        this.oldUserService = oldUserService;
+    }
 
     @PostMapping
     public ResponseEntity<UserVO> save(@RequestBody UserVO userVO) {

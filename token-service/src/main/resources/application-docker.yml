@@ -4,6 +4,18 @@ server:
 spring:
   application:
     name: token-service
+  datasource:
+    username: ${DEV_DB_USERNAME}
+    password: ${DEV_DB_PASSWORD}
+    url: jdbc:postgresql://${EMAIL_DB_HOST}/sma-db-email
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: false
+        show-sql: true
 
 eureka:
   client:
@@ -15,3 +27,5 @@ management:
   zipkin:
     tracing:
       endpoint: http://zipkin:9941
+
+tokenValidityTimeInMinutes: 30
