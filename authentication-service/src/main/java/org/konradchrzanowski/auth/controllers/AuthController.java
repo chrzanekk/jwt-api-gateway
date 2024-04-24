@@ -9,6 +9,8 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.konradchrzanowski.auth.entities.AuthRequest;
 import org.konradchrzanowski.auth.entities.AuthResponse;
+import org.konradchrzanowski.auth.security.AuthTokenFilter;
+import org.konradchrzanowski.auth.security.JwtUtil;
 import org.konradchrzanowski.auth.services.AuthService;
 import org.konradchrzanowski.auth.services.impl.AuthServiceImpl;
 import org.konradchrzanowski.clients.email.EmailClient;
@@ -49,10 +51,11 @@ public class AuthController {
 
     private final AuthenticationManager authenticationManager;
     private final AuthService authService;
+    private final JwtUtil jwtUtil;
+    private final AuthTokenFilter authTokenFilter;
 
     private final UserClient userClient;
     private final EmailClient emailClient;
-    private final TokenClient tokenClient;
 
     @GetMapping("/authenticate")
     public String isAuthenticated(HttpServletRequest request) {
@@ -70,7 +73,7 @@ public class AuthController {
         Authentication authentication = authenticationManager.authenticate(token);
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        String jwt = jwtUtils.generateJwtToken(authentication);
+        String jwt = jwtUtil.generateJwtToken(authentication);
         HttpHeaders headers = new HttpHeaders();
         headers.add(AuthTokenFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
         return new ResponseEntity<>(new JWTToken(jwt), headers, HttpStatus.OK);
@@ -133,7 +136,7 @@ public class AuthController {
     @PutMapping("/request-password-reset")
     @Transactional
     public ResponseEntity<?> passwordReset(@Valid @NotNull @RequestBody PasswordResetRequest passwordResetRequest) {
-        log.debug("REST request to set new password for user: {}", passwordResetRequest.getEmail());
+        log.debug("REST request to set new password for user: {}", passwordResetRequest.email());
 
         if (!isEmailTaken(passwordResetRequest.email())) {
             throw new EmailNotFoundException("Email not found");
@@ -149,7 +152,7 @@ public class AuthController {
         log.debug("REST request to set new password by token: {}", request.token());
         validatePasswordMatch(request);
         UserDTO updatedUser = authService.saveNewPassword(request);
-        SentEmailResponse response = emailClient.sendPasswordChange(updatedUser).getBody();
+        SentEmailResponse response = emailClient.sendPasswordChange(request.token()).getBody();
         //todo validate response
         return ResponseEntity.ok().body(response);
     }
@@ -172,6 +175,4 @@ public class AuthController {
             throw new PasswordNotMatchException("Password not match");
         }
     }
-
-
 }

@@ -2,7 +2,7 @@ package org.konradchrzanowski.auth.services.impl;
 
 import lombok.AllArgsConstructor;
 import org.konradchrzanowski.auth.services.AuthService;
-import org.konradchrzanowski.auth.services.JwtUtil;
+import org.konradchrzanowski.auth.security.JwtUtil;
 import org.konradchrzanowski.auth.util.SecurityUtils;
 import org.konradchrzanowski.clients.token.TokenClient;
 import org.konradchrzanowski.clients.user.UserClient;
