@@ -1,9 +1,8 @@
 package org.konradchrzanowski.user.service.impl;
 
 import jakarta.transaction.Transactional;
-import lombok.AllArgsConstructor;
-import lombok.extern.log4j.Log4j2;
 import org.konradchrzanowski.clients.token.TokenClient;
+import org.konradchrzanowski.user.domain.Role;
 import org.konradchrzanowski.user.domain.User;
 import org.konradchrzanowski.user.mapper.UserMapper;
 import org.konradchrzanowski.user.repository.RoleRepository;
@@ -19,6 +18,8 @@ import org.konradchrzanowski.utils.common.enumeration.ERole;
 import org.konradchrzanowski.utils.common.payload.request.RegisterRequest;
 import org.konradchrzanowski.utils.common.payload.response.UserInfoResponse;
 import org.konradchrzanowski.utils.email.EmailUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -32,10 +33,13 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-@Log4j2
+
 @Service
 @Transactional
 public class UserServiceImpl implements UserService {
+
+    private final Logger log = LoggerFactory.getLogger(UserServiceImpl.class);
+
 
     private final static String USER_NOT_FOUND = "user with email %s not found";
 
@@ -109,6 +113,7 @@ public class UserServiceImpl implements UserService {
         }
 
         ConfirmationTokenDTO confirmedDTO = tokenClient.updateConfirmationToken(confirmationTokenDTO).getBody();
+        assert confirmedDTO != null;
         UserDTO user = getUser(confirmedDTO.email());
         update(UserDTO.builder(user).enabled(true).locked(false).build());
         return "Confirmed at" + confirmedDTO.confirmDate().toString();
