@@ -6,6 +6,8 @@ import org.konradchrzanowski.utils.common.dto.UserDTO;
 import org.konradchrzanowski.utils.common.payload.response.UserInfoResponse;
 import org.konradchrzanowski.utils.controller.PaginationUtil;
 import org.konradchrzanowski.utils.filters.UserFilter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -15,11 +17,11 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.List;
 
-@Slf4j
+
 @RestController
 @RequestMapping(value = "/api/users")
 public class UserController {
-
+    private final Logger log = LoggerFactory.getLogger(UserController.class);
 
     private final UserService userService;
 

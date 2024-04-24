@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 
 @Component
 public class JwtUtil {
-    private static final Logger log = LoggerFactory.getLogger(JwtUtils.class);
+    private static final Logger log = LoggerFactory.getLogger(JwtUtil.class);
 
     private static final String AUTHORITIES_KEY = "auth";
 

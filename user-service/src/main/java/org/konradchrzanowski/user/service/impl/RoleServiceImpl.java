@@ -1,15 +1,13 @@
 package org.konradchrzanowski.user.service.impl;
 
 import jakarta.transaction.Transactional;
-import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.konradchrzanowski.user.domain.Role;
-import org.konradchrzanowski.user.exception.RoleException;
 import org.konradchrzanowski.user.mapper.RoleMapper;
 import org.konradchrzanowski.user.repository.RoleRepository;
 import org.konradchrzanowski.user.service.RoleService;
 import org.konradchrzanowski.utils.common.dto.RoleDTO;
 import org.konradchrzanowski.utils.common.enumeration.ERole;
+import org.konradchrzanowski.utils.exception.RoleException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
