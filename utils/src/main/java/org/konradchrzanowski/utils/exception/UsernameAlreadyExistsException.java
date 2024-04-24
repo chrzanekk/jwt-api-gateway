@@ -1,4 +1,4 @@
-package org.konradchrzanowski.user.exception;
+package org.konradchrzanowski.utils.exception;
 
 public class UsernameAlreadyExistsException extends RuntimeException{
 

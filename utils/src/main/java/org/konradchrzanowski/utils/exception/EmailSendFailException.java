@@ -1,4 +1,4 @@
-package org.konradchrzanowski.email.exception;
+package org.konradchrzanowski.utils.exception;
 
 public class EmailSendFailException extends RuntimeException {
 

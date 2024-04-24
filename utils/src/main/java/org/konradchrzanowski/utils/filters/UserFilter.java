@@ -1,4 +1,4 @@
-package org.konradchrzanowski.user.service.filter;
+package org.konradchrzanowski.utils.filters;
 
 public class UserFilter {
 

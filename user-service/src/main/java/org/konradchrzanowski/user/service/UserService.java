@@ -1,9 +1,9 @@
 package org.konradchrzanowski.user.service;
 
-import org.konradchrzanowski.user.service.filter.UserFilter;
 import org.konradchrzanowski.utils.common.dto.UserDTO;
 import org.konradchrzanowski.utils.common.payload.request.RegisterRequest;
 import org.konradchrzanowski.utils.common.payload.response.UserInfoResponse;
+import org.konradchrzanowski.utils.filters.UserFilter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

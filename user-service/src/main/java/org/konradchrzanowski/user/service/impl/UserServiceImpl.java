@@ -9,7 +9,6 @@ import org.konradchrzanowski.user.repository.RoleRepository;
 import org.konradchrzanowski.user.repository.UserRepository;
 import org.konradchrzanowski.user.service.RoleService;
 import org.konradchrzanowski.user.service.UserService;
-import org.konradchrzanowski.user.service.filter.UserFilter;
 import org.konradchrzanowski.user.service.filter.UserSpecification;
 import org.konradchrzanowski.utils.common.dto.ConfirmationTokenDTO;
 import org.konradchrzanowski.utils.common.dto.RoleDTO;
@@ -18,6 +17,7 @@ import org.konradchrzanowski.utils.common.enumeration.ERole;
 import org.konradchrzanowski.utils.common.payload.request.RegisterRequest;
 import org.konradchrzanowski.utils.common.payload.response.UserInfoResponse;
 import org.konradchrzanowski.utils.email.EmailUtil;
+import org.konradchrzanowski.utils.filters.UserFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -184,6 +184,8 @@ public class UserServiceImpl implements UserService {
         return userRepository.existsByEmail(email);
     }
 
+
+    //todo move to auth-service because of security-utils
     @Override
     public UserInfoResponse getUserWithAuthorities() {
         //todo need to implement somewhere this SecurityUtils

@@ -19,15 +19,17 @@ public class GatewayConfig {
     @Bean
     public RouteLocator routes(RouteLocatorBuilder builder) {
         return builder.routes()
-                .route("user-service", r -> r.path("/users/**")
+                .route("user-service", r -> r.path("/api/users/**")
                         .filters(f -> f.filter(filter))
                         .uri("lb://user-service"))
-                .route("authentication-service", r -> r.path("/auth/**")
+                .route("authentication-service", r -> r.path("/api/auth/**")
                         .filters(f -> f.filter(filter))
                         .uri("lb://authentication-service"))
-                .route("email-service", r-> r.path("/email/**")
+                .route("email-service", r-> r.path("/api/email/**")
                         .filters(f-> f.filter(filter))
                         .uri("lb://email-service"))
+                .route("token-service", r-> r.path("/api/token/**")
+                        .uri("lb://token-service"))
                 .build();
     }
 }

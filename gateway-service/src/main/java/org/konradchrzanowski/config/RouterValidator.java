@@ -8,9 +8,9 @@ import java.util.function.Predicate;
 
 @Service
 public class RouterValidator {
-//here we list all open endpoint for our microservices
+
     public static final List<String> openEndpoints = List.of(
-            "/auth/register"
+            "/api/auth/**","/api/test//all"
     );
 
     public Predicate<ServerHttpRequest> isSecured =
