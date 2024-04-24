@@ -3,6 +3,7 @@ package org.konradchrzanowski.auth.services;
 import org.konradchrzanowski.utils.common.dto.UserDTO;
 import org.konradchrzanowski.utils.common.payload.request.NewPasswordPutRequest;
 import org.konradchrzanowski.utils.common.payload.request.RegisterRequest;
+import org.konradchrzanowski.utils.common.payload.response.UserInfoResponse;
 
 public interface AuthService {
 
@@ -13,4 +14,5 @@ public interface AuthService {
 
     UserDTO saveNewPassword(NewPasswordPutRequest newPasswordPutRequest);
 
+    UserInfoResponse getUserWithAuthorities();
 }

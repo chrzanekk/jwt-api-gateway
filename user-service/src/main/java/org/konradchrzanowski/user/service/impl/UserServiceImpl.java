@@ -2,10 +2,8 @@ package org.konradchrzanowski.user.service.impl;
 
 import jakarta.transaction.Transactional;
 import org.konradchrzanowski.clients.token.TokenClient;
-import org.konradchrzanowski.user.domain.Role;
 import org.konradchrzanowski.user.domain.User;
 import org.konradchrzanowski.user.mapper.UserMapper;
-import org.konradchrzanowski.user.repository.RoleRepository;
 import org.konradchrzanowski.user.repository.UserRepository;
 import org.konradchrzanowski.user.service.RoleService;
 import org.konradchrzanowski.user.service.UserService;
@@ -15,7 +13,6 @@ import org.konradchrzanowski.utils.common.dto.RoleDTO;
 import org.konradchrzanowski.utils.common.dto.UserDTO;
 import org.konradchrzanowski.utils.common.enumeration.ERole;
 import org.konradchrzanowski.utils.common.payload.request.RegisterRequest;
-import org.konradchrzanowski.utils.common.payload.response.UserInfoResponse;
 import org.konradchrzanowski.utils.email.EmailUtil;
 import org.konradchrzanowski.utils.filters.UserFilter;
 import org.slf4j.Logger;
@@ -45,8 +42,6 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
-    private final RoleRepository roleRepository;
-
     private final UserMapper userMapper;
 
     private final RoleService roleService;
@@ -55,9 +50,8 @@ public class UserServiceImpl implements UserService {
 
     private final PasswordEncoder encoder;
 
-    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, UserMapper userMapper, RoleService roleService, TokenClient tokenClient, PasswordEncoder encoder) {
+    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper, RoleService roleService, TokenClient tokenClient, PasswordEncoder encoder) {
         this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
         this.userMapper = userMapper;
         this.roleService = roleService;
         this.tokenClient = tokenClient;
@@ -173,6 +167,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserDTO getUserByUserName(String userName) {
+        log.debug("Fetch user {} ", userName);
+        User user = userRepository.findByUsername(userName)
+                .orElseThrow(() -> new UsernameNotFoundException(String.format(USER_NOT_FOUND, userName)));
+        //todo check if roles are mapped correctly to dto
+        return userMapper.toDto(user);
+    }
+
+    @Override
     public Boolean isUserExists(String userName) {
         log.debug("Request to check if userName exists in DB: {}", userName);
         return userRepository.existsByUsername(userName);
@@ -182,21 +185,6 @@ public class UserServiceImpl implements UserService {
     public Boolean isEmailExists(String email) {
         log.debug("Request to check if email exists in DB: {}", email);
         return userRepository.existsByEmail(email);
-    }
-
-
-    //todo move to auth-service because of security-utils
-    @Override
-    public UserInfoResponse getUserWithAuthorities() {
-        //todo need to implement somewhere this SecurityUtils
-        String currentLogin = SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new UsernameNotFoundException("User not found"));
-        User currentUser = userRepository.findByUsername(currentLogin).orElseThrow(() -> new UsernameNotFoundException("User not found"));
-        List<ERole> currentRoles = currentUser.getRoles().stream().map(Role::getName).toList();
-        return new UserInfoResponse(
-                currentUser.getId(),
-                currentUser.getUsername(),
-                currentUser.getEmail(),
-                currentRoles);
     }
 
 }

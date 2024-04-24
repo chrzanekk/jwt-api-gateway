@@ -1,6 +1,7 @@
 package org.konradchrzanowski.user.service.filter;
 
 import org.konradchrzanowski.user.domain.User;
+import org.konradchrzanowski.utils.filters.UserFilter;
 import org.springframework.data.jpa.domain.Specification;
 
 

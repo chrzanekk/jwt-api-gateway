@@ -69,10 +69,7 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/get-account")
-    public UserInfoResponse getAccount() {
-        return userService.getUserWithAuthorities();
-    }
+
 
     @PutMapping(path = "/update")
     public ResponseEntity<UserDTO> updateUser(@RequestBody UserDTO userDTO) {
@@ -107,5 +104,10 @@ public class UserController {
         return ResponseEntity.ok().body(userDTO);
     }
 
-
+    @GetMapping(path = "/get-user-by-userName")
+    public ResponseEntity<UserDTO> getUserByUserName(String userName) {
+        log.debug("Request to get user by userName: {}", userName);
+        UserDTO userDTO = userService.getUserByUserName(userName);
+        return ResponseEntity.ok().body(userDTO);
+    }
 }

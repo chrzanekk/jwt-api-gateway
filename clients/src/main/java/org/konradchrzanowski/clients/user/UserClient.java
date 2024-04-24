@@ -1,7 +1,6 @@
 package org.konradchrzanowski.clients.user;
 
 import org.konradchrzanowski.utils.common.dto.UserDTO;
-import org.konradchrzanowski.utils.common.payload.response.UserInfoResponse;
 import org.konradchrzanowski.utils.filters.UserFilter;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.data.domain.Pageable;
@@ -30,11 +29,8 @@ public interface UserClient {
     @DeleteMapping(path = "/delete/{id}")
     ResponseEntity<?> deleteUserById(@PathVariable Long id);
 
-    @GetMapping("/get-account")
-    UserInfoResponse getAccount();
-
     @PutMapping(path = "/update")
-    ResponseEntity<UserDTO> updateUser(@RequestBody UserDTO userDTO) ;
+    ResponseEntity<UserDTO> updateUser(@RequestBody UserDTO userDTO);
 
     @PostMapping(path = "/save")
     ResponseEntity<UserDTO> saveUser(UserDTO userDTO);
@@ -47,4 +43,7 @@ public interface UserClient {
 
     @GetMapping(path = "/get-user-by-email")
     ResponseEntity<UserDTO> getUserByEmail(String email);
+
+    @GetMapping(path = "/get-user-by-userName")
+    ResponseEntity<UserDTO> getUserByUserName(String userName);
 }

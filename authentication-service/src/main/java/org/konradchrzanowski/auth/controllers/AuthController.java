@@ -21,6 +21,7 @@ import org.konradchrzanowski.utils.common.payload.request.PasswordResetRequest;
 import org.konradchrzanowski.utils.common.payload.request.RegisterRequest;
 import org.konradchrzanowski.utils.common.payload.response.MessageResponse;
 import org.konradchrzanowski.utils.common.payload.response.SentEmailResponse;
+import org.konradchrzanowski.utils.common.payload.response.UserInfoResponse;
 import org.konradchrzanowski.utils.exception.EmailAlreadyExistsException;
 import org.konradchrzanowski.utils.exception.EmailNotFoundException;
 import org.konradchrzanowski.utils.exception.PasswordNotMatchException;
@@ -151,6 +152,11 @@ public class AuthController {
         SentEmailResponse response = emailClient.sendPasswordChange(updatedUser).getBody();
         //todo validate response
         return ResponseEntity.ok().body(response);
+    }
+
+    @GetMapping("/get-account")
+    public UserInfoResponse getAccount() {
+        return authService.getUserWithAuthorities();
     }
 
     private boolean isEmailTaken(String email) {

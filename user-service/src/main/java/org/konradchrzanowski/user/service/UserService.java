@@ -30,10 +30,10 @@ public interface UserService {
     void delete(Long id);
 
     UserDTO getUser(String email);
+    UserDTO getUserByUserName(String userName);
 
     Boolean isUserExists(String userName);
 
     Boolean isEmailExists(String email);
 
-    UserInfoResponse getUserWithAuthorities();
 }
