@@ -149,7 +149,7 @@ public class AuthController {
         return authService.validateToken(token);
     }
 
-    @GetMapping(path = "/token")
+    @PostMapping(path = "/token")
     public String getToken(@Valid @RequestBody LoginRequest request) {
         Authentication authentication = prepareAuthentication(request);
         return jwtUtil.generateJwtToken(authentication);

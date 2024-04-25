@@ -1,5 +1,7 @@
-package org.konradchrzanowski.auth.security;
+package org.konradchrzanowski.auth.config;
 
+import org.konradchrzanowski.auth.security.AuthTokenFilter;
+import org.konradchrzanowski.auth.security.SecurityProblemSupport;
 import org.konradchrzanowski.auth.security.services.UserDetailsServiceImpl;
 import org.konradchrzanowski.utils.common.enumeration.ERole;
 import org.springframework.context.annotation.Bean;
@@ -60,7 +62,7 @@ public class WebSecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-
+//todo need to reimplement filterChain for spring boot 3
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
