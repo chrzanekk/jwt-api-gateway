@@ -1,9 +1,8 @@
 package org.konradchrzanowski.user.controller;
 
-import lombok.extern.slf4j.Slf4j;
 import org.konradchrzanowski.user.service.UserService;
 import org.konradchrzanowski.utils.common.dto.UserDTO;
-import org.konradchrzanowski.utils.common.payload.response.UserInfoResponse;
+import org.konradchrzanowski.utils.common.payload.request.RegisterRequest;
 import org.konradchrzanowski.utils.controller.PaginationUtil;
 import org.konradchrzanowski.utils.filters.UserFilter;
 import org.slf4j.Logger;
@@ -72,7 +71,6 @@ public class UserController {
     }
 
 
-
     @PutMapping(path = "/update")
     public ResponseEntity<UserDTO> updateUser(@RequestBody UserDTO userDTO) {
         log.debug("REST request to update user: {}", userDTO);
@@ -111,5 +109,19 @@ public class UserController {
         log.debug("Request to get user by userName: {}", userName);
         UserDTO userDTO = userService.getUserByUserName(userName);
         return ResponseEntity.ok().body(userDTO);
+    }
+
+    @PostMapping(path = "/register")
+    public ResponseEntity<UserDTO> registerNewUser(RegisterRequest registerRequest) {
+        log.debug("Request to register new user: {}", registerRequest);
+        UserDTO userDTO = userService.register(registerRequest);
+        return ResponseEntity.ok().body(userDTO);
+    }
+
+    @PostMapping(path = "/confirm")
+    ResponseEntity<String> confirm(String confirmationToken) {
+        log.debug("Request to confirm user");
+        String confirmation = userService.confirm(confirmationToken);
+        return ResponseEntity.ok().body(confirmation);
     }
 }

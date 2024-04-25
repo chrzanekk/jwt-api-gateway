@@ -7,21 +7,16 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.konradchrzanowski.auth.entities.AuthRequest;
-import org.konradchrzanowski.auth.entities.AuthResponse;
 import org.konradchrzanowski.auth.security.AuthTokenFilter;
 import org.konradchrzanowski.auth.security.JwtUtil;
 import org.konradchrzanowski.auth.services.AuthService;
-import org.konradchrzanowski.auth.services.impl.AuthServiceImpl;
 import org.konradchrzanowski.clients.email.EmailClient;
-import org.konradchrzanowski.clients.token.TokenClient;
 import org.konradchrzanowski.clients.user.UserClient;
 import org.konradchrzanowski.utils.common.dto.UserDTO;
 import org.konradchrzanowski.utils.common.payload.request.LoginRequest;
 import org.konradchrzanowski.utils.common.payload.request.NewPasswordPutRequest;
 import org.konradchrzanowski.utils.common.payload.request.PasswordResetRequest;
 import org.konradchrzanowski.utils.common.payload.request.RegisterRequest;
-import org.konradchrzanowski.utils.common.payload.response.MessageResponse;
 import org.konradchrzanowski.utils.common.payload.response.SentEmailResponse;
 import org.konradchrzanowski.utils.common.payload.response.UserInfoResponse;
 import org.konradchrzanowski.utils.exception.EmailAlreadyExistsException;
@@ -37,8 +32,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Locale;
 
 @Slf4j
 @RestController
@@ -121,16 +114,20 @@ public class AuthController {
         UserDTO savedUser = authService.register(updatedRequest);
 
         SentEmailResponse response = emailClient.sendEmailAfterRegistration(savedUser).getBody();
-        //todo validate response
         return ResponseEntity.ok().body(response);
     }
 
     @GetMapping("/confirm")
-    public String confirmRegistration(@RequestParam("token") String token) {
+    public SentEmailResponse confirmRegistration(@RequestParam("token") String token) {
         log.debug("REST request to confirm user registration. Token: {}", token);
         SentEmailResponse response = emailClient.sendEmailAfterEmailConfirmation(token).getBody();
-        //todo validate response
-        return authService.confirmUser(token);
+        assert response != null;
+        boolean isEmailSent = response.isSentEmail();
+        if (!isEmailSent) {
+            return response;
+        } else {
+            return authService.confirmUser(token);
+        }
     }
 
     @PutMapping("/request-password-reset")
@@ -143,7 +140,6 @@ public class AuthController {
         }
         UserDTO userDTO = userClient.getUserByEmail(passwordResetRequest.email()).getBody();
         SentEmailResponse response = emailClient.sendPasswordReset(userDTO).getBody();
-        //todo validate response
         return ResponseEntity.ok().body(response);
     }
 
@@ -153,7 +149,6 @@ public class AuthController {
         validatePasswordMatch(request);
         UserDTO updatedUser = authService.saveNewPassword(request);
         SentEmailResponse response = emailClient.sendPasswordChange(request.token()).getBody();
-        //todo validate response
         return ResponseEntity.ok().body(response);
     }
 

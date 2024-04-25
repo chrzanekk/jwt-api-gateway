@@ -11,33 +11,53 @@ import org.konradchrzanowski.utils.common.dto.UserDTO;
 import org.konradchrzanowski.utils.common.enumeration.ERole;
 import org.konradchrzanowski.utils.common.payload.request.NewPasswordPutRequest;
 import org.konradchrzanowski.utils.common.payload.request.RegisterRequest;
+import org.konradchrzanowski.utils.common.payload.response.SentEmailResponse;
 import org.konradchrzanowski.utils.common.payload.response.UserInfoResponse;
+import org.konradchrzanowski.utils.exception.EmailAlreadyExistsException;
+import org.konradchrzanowski.utils.exception.UsernameAlreadyExistsException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-@AllArgsConstructor
 public class AuthServiceImpl implements AuthService {
-    @Override
-    public UserDTO register(RegisterRequest registerRequest) {
-        return null;
+
+    private final Logger log = LoggerFactory.getLogger(AuthServiceImpl.class);
+
+    private final UserClient userClient;
+
+    public AuthServiceImpl(UserClient userClient) {
+        this.userClient = userClient;
     }
 
     @Override
-    public String confirmUser(String token) {
-        return "";
+    public UserDTO register(RegisterRequest registerRequest) {
+        log.info("Register request: {}", registerRequest);
+        RegisterRequest updatedRequest = RegisterRequest.builder(registerRequest)
+                .username(registerRequest.getUsername().toLowerCase()).build();
+        if(userClient.isUserExists(registerRequest.getUsername())) {
+            throw new UsernameAlreadyExistsException("Error: User is already in use:" + registerRequest.getUsername());
+        }
+        if(userClient.isEmailExists(registerRequest.getEmail())) {
+            throw new EmailAlreadyExistsException("Error: Email is already in use:" + registerRequest.getEmail());
+        }
+        return userClient.registerNewUser(registerRequest).getBody();
+    }
+
+    @Override
+    public SentEmailResponse confirmUser(String token) {
+        log.info("Confirm user: {}", token);
+        String confirmed = userClient.confirm(token).getBody();
+        return new SentEmailResponse(confirmed, true);
     }
 
     @Override
     public UserDTO saveNewPassword(NewPasswordPutRequest newPasswordPutRequest) {
         return null;
     }
-
-    private final UserClient userClient;
-    private final TokenClient tokenClient;
-    private final JwtUtil jwtUtil;
 
     @Override
     public UserInfoResponse getUserWithAuthorities() {

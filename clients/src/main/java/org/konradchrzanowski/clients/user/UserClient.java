@@ -1,6 +1,7 @@
 package org.konradchrzanowski.clients.user;
 
 import org.konradchrzanowski.utils.common.dto.UserDTO;
+import org.konradchrzanowski.utils.common.payload.request.RegisterRequest;
 import org.konradchrzanowski.utils.filters.UserFilter;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.data.domain.Pageable;
@@ -46,4 +47,10 @@ public interface UserClient {
 
     @GetMapping(path = "/get-user-by-userName")
     ResponseEntity<UserDTO> getUserByUserName(String userName);
+
+    @PostMapping(path = "/register")
+    ResponseEntity<UserDTO> registerNewUser(RegisterRequest registerRequest);
+
+    @PostMapping(path = "/confirm")
+    ResponseEntity<String> confirm(String confirmationToken);
 }

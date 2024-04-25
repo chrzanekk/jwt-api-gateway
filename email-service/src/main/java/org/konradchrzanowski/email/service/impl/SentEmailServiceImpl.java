@@ -108,7 +108,7 @@ public class SentEmailServiceImpl implements SentEmailService {
         emailSenderService.sendEmail(emailDTO);
         SentEmail sentEmail = sentEmailMapper.toEntity(emailDTO);
         sentEmailRepository.save(sentEmail);
-        return new SentEmailResponse("Register successful", true);
+        return new SentEmailResponse("Confirmation successful", true);
     }
 
     @Override
