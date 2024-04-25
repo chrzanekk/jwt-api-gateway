@@ -40,7 +40,7 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     @Value("${tokenValidityTimeInMinutes}")
-    private Long tokenValidityTimeInMinutes;
+    private final Long tokenValidityTimeInMinutes;
 
     private final AuthenticationManager authenticationManager;
     private final AuthService authService;
@@ -59,40 +59,26 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<JWTToken> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
         log.debug("REST request to login user {}", loginRequest);
-        LoginRequest updatedRequest =
-                LoginRequest.builder(loginRequest).username(loginRequest.getUsername().toLowerCase()).build();
-        UsernamePasswordAuthenticationToken token =
-                new UsernamePasswordAuthenticationToken(updatedRequest.getUsername(), updatedRequest.getPassword());
-        Authentication authentication = authenticationManager.authenticate(token);
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
+        LoginRequest updatedRequest = LoginRequest.builder(loginRequest)
+                .username(loginRequest.getUsername().toLowerCase()).build();
+        Authentication authentication = prepareAuthentication(updatedRequest);
         String jwt = jwtUtil.generateJwtToken(authentication);
         HttpHeaders headers = new HttpHeaders();
         headers.add(AuthTokenFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
         return new ResponseEntity<>(new JWTToken(jwt), headers, HttpStatus.OK);
     }
 
+    private Authentication prepareAuthentication(LoginRequest updatedRequest) {
+        UsernamePasswordAuthenticationToken token =
+                new UsernamePasswordAuthenticationToken(updatedRequest.getUsername(), updatedRequest.getPassword());
+        Authentication authentication = authenticationManager.authenticate(token);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        return authentication;
+    }
+
     @PostMapping("/logout")
     public ResponseEntity<?> logoutUser() {
         return ResponseEntity.ok().build();
-    }
-
-    static class JWTToken {
-
-        private String tokenValue;
-
-        JWTToken(String tokenValue) {
-            this.tokenValue = tokenValue;
-        }
-
-        @JsonProperty("id_token")
-        String getTokenValue() {
-            return tokenValue;
-        }
-
-        void setTokenValue(String tokenValue) {
-            this.tokenValue = tokenValue;
-        }
     }
 
     @PostMapping("/register")
@@ -157,6 +143,18 @@ public class AuthController {
         return authService.getUserWithAuthorities();
     }
 
+    @PostMapping("/validate-token")
+    @Transactional
+    public Boolean validateToken(@RequestParam("token") String token) {
+        return authService.validateToken(token);
+    }
+
+    @GetMapping(path = "/token")
+    public String getToken(@Valid @RequestBody LoginRequest request) {
+        Authentication authentication = prepareAuthentication(request);
+        return jwtUtil.generateJwtToken(authentication);
+    }
+
     private boolean isEmailTaken(String email) {
         return Boolean.TRUE.equals(userClient.isEmailExists(email));
     }
@@ -168,6 +166,24 @@ public class AuthController {
     private void validatePasswordMatch(NewPasswordPutRequest request) {
         if (!request.password().equals(request.confirmPassword())) {
             throw new PasswordNotMatchException("Password not match");
+        }
+    }
+
+    static class JWTToken {
+
+        private String tokenValue;
+
+        JWTToken(String tokenValue) {
+            this.tokenValue = tokenValue;
+        }
+
+        @JsonProperty("id_token")
+        String getTokenValue() {
+            return tokenValue;
+        }
+
+        void setTokenValue(String tokenValue) {
+            this.tokenValue = tokenValue;
         }
     }
 }

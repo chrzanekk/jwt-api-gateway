@@ -47,25 +47,6 @@ public class JwtUtil {
     }
 
 
-
-    public String generate(String userId, String role, String tokenType) {
-        Map<String, String> claims = Map.of("id", userId, "role", role);
-        long expMillis = "ACCESS".equalsIgnoreCase(tokenType)
-                ? Long.parseLong(expiration) * 1000
-                : Long.parseLong(expiration) * 1000 * 5;
-
-        final Date now = new Date();
-        final Date exp = new Date(now.getTime() + expMillis);
-
-        return Jwts.builder()
-                .setClaims(claims)
-                .setSubject(claims.get("id"))
-                .setIssuedAt(now)
-                .setExpiration(exp)
-                .signWith(key)
-                .compact();
-    }
-
     private boolean isExpired(String token) {
         return getExpirationDate(token).before(new Date());
     }

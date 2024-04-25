@@ -1,10 +1,8 @@
 package org.konradchrzanowski.auth.services.impl;
 
-import lombok.AllArgsConstructor;
-import org.konradchrzanowski.auth.services.AuthService;
 import org.konradchrzanowski.auth.security.JwtUtil;
+import org.konradchrzanowski.auth.services.AuthService;
 import org.konradchrzanowski.auth.util.SecurityUtils;
-import org.konradchrzanowski.clients.token.TokenClient;
 import org.konradchrzanowski.clients.user.UserClient;
 import org.konradchrzanowski.utils.common.dto.RoleDTO;
 import org.konradchrzanowski.utils.common.dto.UserDTO;
@@ -17,7 +15,9 @@ import org.konradchrzanowski.utils.exception.EmailAlreadyExistsException;
 import org.konradchrzanowski.utils.exception.UsernameAlreadyExistsException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,9 +28,13 @@ public class AuthServiceImpl implements AuthService {
     private final Logger log = LoggerFactory.getLogger(AuthServiceImpl.class);
 
     private final UserClient userClient;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtUtil jwtUtil;
 
-    public AuthServiceImpl(UserClient userClient) {
+    public AuthServiceImpl(UserClient userClient, PasswordEncoder passwordEncoder, JwtUtil jwtUtil) {
         this.userClient = userClient;
+        this.passwordEncoder = passwordEncoder;
+        this.jwtUtil = jwtUtil;
     }
 
     @Override
@@ -38,13 +42,15 @@ public class AuthServiceImpl implements AuthService {
         log.info("Register request: {}", registerRequest);
         RegisterRequest updatedRequest = RegisterRequest.builder(registerRequest)
                 .username(registerRequest.getUsername().toLowerCase()).build();
-        if(userClient.isUserExists(registerRequest.getUsername())) {
+        if (userClient.isUserExists(registerRequest.getUsername())) {
             throw new UsernameAlreadyExistsException("Error: User is already in use:" + registerRequest.getUsername());
         }
-        if(userClient.isEmailExists(registerRequest.getEmail())) {
+        if (userClient.isEmailExists(registerRequest.getEmail())) {
             throw new EmailAlreadyExistsException("Error: Email is already in use:" + registerRequest.getEmail());
         }
-        return userClient.registerNewUser(registerRequest).getBody();
+        RegisterRequest encodedRequest = RegisterRequest.builder(updatedRequest)
+                .password(passwordEncoder.encode(registerRequest.getPassword())).build();
+        return userClient.registerNewUser(encodedRequest).getBody();
     }
 
     @Override
@@ -71,6 +77,16 @@ public class AuthServiceImpl implements AuthService {
                 currentUser.getUsername(),
                 currentUser.getEmail(),
                 currentRoles);
+    }
+
+    @Override
+    public String generateToken(Authentication authentication) {
+        return jwtUtil.generateJwtToken(authentication);
+    }
+
+    @Override
+    public boolean validateToken(String token) {
+        return jwtUtil.validateJwtToken(token);
     }
 
 }
