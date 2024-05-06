@@ -20,7 +20,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserDTO user = userClient.getUserByUserName(username).getBody();
-        assert user != null;
-        return UserDetailsImpl.build(user);
+        if (user != null) {
+            return UserDetailsImpl.build(user);
+        } else {
+            throw new UsernameNotFoundException("User not found" + username);
+        }
     }
 }

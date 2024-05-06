@@ -1,5 +1,6 @@
 package org.konradchrzanowski.config;
 
+import org.konradchrzanowski.config.filter.AuthenticationFilter;
 import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.cloud.netflix.hystrix.EnableHystrix;

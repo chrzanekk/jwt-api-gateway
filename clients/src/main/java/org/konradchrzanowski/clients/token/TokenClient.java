@@ -27,7 +27,7 @@ public interface TokenClient {
     public ResponseEntity<ConfirmationTokenDTO> getConfirmationTokenByToken(@RequestBody String token);
 
 
-    @GetMapping(path = "/api/token//password-reset/generate-token")
+    @GetMapping(path = "/api/token/password-reset/generate-token")
     public ResponseEntity<String> generatePasswordResetToken();
 
     @PostMapping(path = "/api/token/password-reset/save")

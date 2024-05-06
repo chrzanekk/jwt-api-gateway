@@ -1,7 +1,6 @@
 package org.konradchrzanowski.auth.security;
 
 import io.jsonwebtoken.*;
-import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import org.konradchrzanowski.auth.security.services.UserDetailsImpl;
@@ -15,7 +14,6 @@ import org.springframework.stereotype.Component;
 import javax.crypto.SecretKey;
 import java.security.Key;
 import java.util.Date;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Component
@@ -64,10 +62,10 @@ public class JwtUtil {
         } catch (IllegalArgumentException e) {
             log.error("JWT claims string is empty: {}", e.getMessage());
         }
-
         return false;
     }
 
+//todo check if i can handle this without UserDetailsImpl - in gateway service
     public String generateJwtToken(Authentication authentication) {
 
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
