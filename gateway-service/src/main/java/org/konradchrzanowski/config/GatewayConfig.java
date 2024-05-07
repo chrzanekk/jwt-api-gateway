@@ -17,6 +17,8 @@ public class GatewayConfig {
         this.filter = filter;
     }
 //here we configure all gateway routes for microservices instead of yml file
+
+    //todo read about gatewayConfig with authenticationFilter - now i have error here after reimplementation of AuthFilter
     @Bean
     public RouteLocator routes(RouteLocatorBuilder builder) {
         return builder.routes()

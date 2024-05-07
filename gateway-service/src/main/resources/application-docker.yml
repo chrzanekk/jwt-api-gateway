@@ -4,7 +4,30 @@ server:
 spring:
   application:
     name: api-gateway
+  cloud:
+    gateway:
+      routes:
+        - id: authentication-service
+          uri: lb://AUTHENTICATION-SERVICE
+          predicates:
+            - Path=/api/**
 
+        - id: email-service
+          uri: lb://EMAIL-SERVICE
+          predicates:
+            - Path=/api/**
+
+        - id: token-service
+          uri: lb://TOKEN-SERVICE
+          predicates:
+            - Path=/api/**
+
+        - id: user-service
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/api/**
+          filters:
+            - AuthenticationFilter
 
 eureka:
   client:
