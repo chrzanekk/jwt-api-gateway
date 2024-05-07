@@ -1,22 +1,14 @@
 package org.konradchrzanowski.config.filter;
 
 import org.konradchrzanowski.util.JwtUtils;
-import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
-import org.springframework.cloud.gateway.filter.GatewayFilterChain;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.server.reactive.ServerHttpRequest;
-import org.springframework.http.server.reactive.ServerHttpResponse;
+import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
-import org.springframework.web.server.ServerWebExchange;
-import reactor.core.publisher.Mono;
 
-//todo reimplement authenticationFilter -> find best way for this setup
 
-@RefreshScope
 @Component
-public class AuthenticationFilter implements GatewayFilter {
-
+public class AuthenticationFilter extends AbstractGatewayFilterFactory<AuthenticationFilter.Config> {
 
     private final RouterValidator validator;
 
@@ -26,33 +18,31 @@ public class AuthenticationFilter implements GatewayFilter {
         this.validator = validator;
         this.jwtUtils = jwtUtils;
     }
-//this method is used to filter endpoints -> need to implement this with standard Authentication Filter?
+
     @Override
-    public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
-        ServerHttpRequest request = exchange.getRequest();
+    public GatewayFilter apply(Config config) {
+        return ((exchange, chain) -> {
+            if (validator.isSecured.test(exchange.getRequest())) {
+                if (!exchange.getRequest().getHeaders().containsKey(HttpHeaders.AUTHORIZATION)) {
+                    throw new RuntimeException("Missing authorization header");
+                }
 
-        if (validator.isSecured.test(request)) {
-            if (authMissing(request)) {
-                return onError(exchange, HttpStatus.UNAUTHORIZED);
+                String authHeader = exchange.getRequest().getHeaders().get(HttpHeaders.AUTHORIZATION).get(0);
+                if (authHeader != null && authHeader.startsWith("Bearer ")) {
+                    authHeader = authHeader.substring(7);
+                }
+                try {
+                    jwtUtils.validateJwtToken(authHeader);
+                } catch (Exception e) {
+                    throw new RuntimeException("Unauthorized access to application");
+                }
             }
-
-            final String token = request.getHeaders().getOrEmpty("Authorization").get(0);
-
-            if (jwtUtils.isExpired(token)) {
-                return onError(exchange, HttpStatus.UNAUTHORIZED);
-            }
-        }
-        return chain.filter(exchange);
+            return chain.filter(exchange);
+        });
     }
 
-    private Mono<Void> onError(ServerWebExchange exchange, HttpStatus httpStatus) {
-        ServerHttpResponse response = exchange.getResponse();
-        response.setStatusCode(httpStatus);
-        return response.setComplete();
-    }
+    public static class Config {
 
-    private boolean authMissing(ServerHttpRequest request) {
-        return !request.getHeaders().containsKey("Authorization");
     }
 
 }
