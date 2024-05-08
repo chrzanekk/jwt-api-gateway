@@ -17,6 +17,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+
+//todo i dont know if this is necessary in microservices
 @Component
 public class AuthEntryPointJwt implements AuthenticationEntryPoint {
 
