@@ -4,6 +4,7 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import org.konradchrzanowski.auth.security.services.UserDetailsImpl;
+import org.konradchrzanowski.utils.enumerated.TokenType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,6 +15,8 @@ import org.springframework.stereotype.Component;
 import javax.crypto.SecretKey;
 import java.security.Key;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Component
@@ -21,6 +24,8 @@ public class JwtUtil {
     private static final Logger log = LoggerFactory.getLogger(JwtUtil.class);
 
     private static final String AUTHORITIES_KEY = "auth";
+    private static final String LOGIN = "login";
+    private static final String TYPE = "type";
 
     @Value("${jwt.secret}")
     private String secret;
@@ -65,28 +70,41 @@ public class JwtUtil {
         return false;
     }
 
-//todo check if i can handle this without UserDetailsImpl - in gateway service
-    public String generateJwtToken(Authentication authentication) {
-
+    public String generateJwtToken(Authentication authentication, TokenType tokenType) {
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority).collect(Collectors.joining(","));
 
-        long now = (new Date()).getTime();
-        Date validity = new Date(now + expiration);
+        Date validityTo = generateExpireDate(tokenType);
+        Map<String, Object> claims = new HashMap<>();
+        claims.put(AUTHORITIES_KEY, authentication.getAuthorities());
+        claims.put(LOGIN, userDetails.getUsername());
+        claims.put(TYPE, tokenType.toString());
 
         return Jwts.builder()
-                .setSubject(userDetails.getUsername())
-                .claim(AUTHORITIES_KEY, authorities)
-                .setIssuedAt(new Date())
-                .setExpiration(validity)
-                .signWith(key, SignatureAlgorithm.HS512)
-                .compact();
+                .claims(claims)
+                .subject(userDetails.getUsername())
+                .issuedAt(new Date())
+                .expiration(validityTo)
+                .signWith(key).compact();
+    }
+
+    private Date generateExpireDate(TokenType tokenType) {
+        long tokenExpirationDateByType = generateExpireDateByTokenType(tokenType);
+        long now = (new Date()).getTime();
+        return new Date(now + tokenExpirationDateByType);
+    }
+
+    private long generateExpireDateByTokenType(TokenType tokenType) {
+        if (tokenType.equals(TokenType.ACCESS)) {
+            return Long.parseLong(expiration);
+        } else {
+            return Long.parseLong(expiration) * 5;
+        }
     }
 
 
     public String getUserNameFromJwtToken(String token) {
-        return Jwts.parser().decryptWith((SecretKey) key).build().parseClaimsJws(token).getBody().getSubject();
+        return Jwts.parser().decryptWith((SecretKey) key).build().parseSignedClaims(token).getPayload().getSubject();
     }
 }

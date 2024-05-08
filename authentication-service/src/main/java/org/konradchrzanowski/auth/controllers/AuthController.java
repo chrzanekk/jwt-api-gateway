@@ -19,6 +19,7 @@ import org.konradchrzanowski.utils.common.payload.request.PasswordResetRequest;
 import org.konradchrzanowski.utils.common.payload.request.RegisterRequest;
 import org.konradchrzanowski.utils.common.payload.response.SentEmailResponse;
 import org.konradchrzanowski.utils.common.payload.response.UserInfoResponse;
+import org.konradchrzanowski.utils.enumerated.TokenType;
 import org.konradchrzanowski.utils.exception.EmailAlreadyExistsException;
 import org.konradchrzanowski.utils.exception.EmailNotFoundException;
 import org.konradchrzanowski.utils.exception.PasswordNotMatchException;
@@ -40,12 +41,11 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     @Value("${tokenValidityTimeInMinutes}")
-    private final Long tokenValidityTimeInMinutes;
 
     private final AuthenticationManager authenticationManager;
     private final AuthService authService;
     private final JwtUtil jwtUtil;
-    private final AuthTokenFilter authTokenFilter;
+//    private final AuthTokenFilter authTokenFilter;
 
     private final UserClient userClient;
     private final EmailClient emailClient;
@@ -62,7 +62,7 @@ public class AuthController {
         LoginRequest updatedRequest = LoginRequest.builder(loginRequest)
                 .username(loginRequest.getUsername().toLowerCase()).build();
         Authentication authentication = prepareAuthentication(updatedRequest);
-        String jwt = jwtUtil.generateJwtToken(authentication);
+        String jwt = jwtUtil.generateJwtToken(authentication, TokenType.ACCESS);
         HttpHeaders headers = new HttpHeaders();
         headers.add(AuthTokenFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
         return new ResponseEntity<>(new JWTToken(jwt), headers, HttpStatus.OK);
@@ -149,10 +149,11 @@ public class AuthController {
         return authService.validateToken(token);
     }
 
+    //todo need to change this in future if i will implement refresh token
     @PostMapping(path = "/token")
     public String getToken(@Valid @RequestBody LoginRequest request) {
         Authentication authentication = prepareAuthentication(request);
-        return jwtUtil.generateJwtToken(authentication);
+        return jwtUtil.generateJwtToken(authentication, TokenType.ACCESS);
     }
 
     private boolean isEmailTaken(String email) {
