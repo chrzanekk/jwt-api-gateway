@@ -55,7 +55,7 @@ public class WebSecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    //todo need to reimplement filterChain for spring boot 3
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http.csrf(AbstractHttpConfigurer::disable)
@@ -70,14 +70,6 @@ public class WebSecurityConfig {
                         .requestMatchers("/api/auth/token").permitAll()
                         .requestMatchers("/api/auth/authenticate").permitAll()
                 ).build();
-//                .antMatchers("/api/auth/**").permitAll()
-//                .antMatchers("/api/test//all").permitAll()
-//                .antMatchers("/api/test/user").hasAnyAuthority(ERole.ROLE_USER.getRoleName())
-//                .antMatchers("/api/test/mod").hasAnyAuthority(ERole.ROLE_MODERATOR.getRoleName())
-//                .antMatchers("/api/test/admin").hasAnyAuthority(ERole.ROLE_ADMIN.getRoleName())
-//                .antMatchers("/api/tires/**").hasAnyAuthority(ERole.ROLE_ADMIN.getRoleName(),ERole.ROLE_USER.getRoleName())
-//                .antMatchers("/api/account/**").authenticated();
-
     }
 
     //todo remove hardcoded origins for frontend from here

@@ -7,7 +7,6 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.konradchrzanowski.auth.security.AuthTokenFilter;
 import org.konradchrzanowski.auth.security.JwtUtil;
 import org.konradchrzanowski.auth.services.AuthService;
 import org.konradchrzanowski.clients.email.EmailClient;
@@ -40,12 +39,13 @@ import org.springframework.web.bind.annotation.*;
 @AllArgsConstructor
 public class AuthController {
 
+    public final String AUTHORIZATION_HEADER = "Authorization";
+
     @Value("${tokenValidityTimeInMinutes}")
 
     private final AuthenticationManager authenticationManager;
     private final AuthService authService;
     private final JwtUtil jwtUtil;
-//    private final AuthTokenFilter authTokenFilter;
 
     private final UserClient userClient;
     private final EmailClient emailClient;
@@ -64,7 +64,7 @@ public class AuthController {
         Authentication authentication = prepareAuthentication(updatedRequest);
         String jwt = jwtUtil.generateJwtToken(authentication, TokenType.ACCESS);
         HttpHeaders headers = new HttpHeaders();
-        headers.add(AuthTokenFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
+        headers.add(AUTHORIZATION_HEADER, "Bearer " + jwt);
         return new ResponseEntity<>(new JWTToken(jwt), headers, HttpStatus.OK);
     }
 

@@ -11,6 +11,7 @@ import org.konradchrzanowski.utils.common.payload.request.NewPasswordPutRequest;
 import org.konradchrzanowski.utils.common.payload.request.RegisterRequest;
 import org.konradchrzanowski.utils.common.payload.response.SentEmailResponse;
 import org.konradchrzanowski.utils.common.payload.response.UserInfoResponse;
+import org.konradchrzanowski.utils.enumerated.TokenType;
 import org.konradchrzanowski.utils.exception.EmailAlreadyExistsException;
 import org.konradchrzanowski.utils.exception.UsernameAlreadyExistsException;
 import org.slf4j.Logger;
@@ -81,7 +82,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public String generateToken(Authentication authentication) {
-        return jwtUtil.generateJwtToken(authentication);
+        return jwtUtil.generateJwtToken(authentication, TokenType.ACCESS);
     }
 
     @Override

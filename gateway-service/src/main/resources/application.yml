@@ -1,34 +1,56 @@
 server:
   port: 8080
 
+logging:
+  pattern:
+    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
+
 spring:
   application:
     name: api-gateway
   cloud:
     gateway:
+      default-filters:
+        - name: RequestRateLimiter
+          args:
+            redis-rate-limiter:
+              replenishRate: 10
+              burstCapacity: 20
+              requestedTokens: 1
       routes:
         - id: authentication-service
-          uri: lb://AUTHENTICATION-SERVICE
+          uri: ${AUTH_SERVICE_URL:http://localhost:9001}
           predicates:
-            - Path=/api/**
-
-        - id: email-service
-          uri: lb://EMAIL-SERVICE
-          predicates:
-            - Path=/api/**
-
-        - id: token-service
-          uri: lb://TOKEN-SERVICE
-          predicates:
-            - Path=/api/**
-
+            - Path=/api/auth/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: authService
+                fallbackUri: forward:/auth-fallback
+            - name: Retry
+              args:
+                retries: 3
+                method: GET
+                backoff:
+                  firstBackoff: 50ms
+                  maxBackoff: 500ms
         - id: user-service
           uri: lb://USER-SERVICE
           predicates:
-            - Path=/api/**
+            - Path=/api/users/**
           filters:
             - AuthenticationFilter
-
+            - name: CircuitBreaker
+              args:
+                name: userService
+                fallbackUri: forward:/auth-fallback
+            - name: Retry
+              args:
+                retries: 3
+                method: GET
+                backoff:
+                  firstBackoff: 50ms
+                  maxBackoff: 500ms
 
 eureka:
   client:
@@ -39,12 +61,60 @@ eureka:
       defaultZone: http://localhost:8761/eureka
 
 management:
-  zipkin:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+    endpoint:
+      health:
+        probes:
+          enabled: true
+        show-details: always
+        show-components: always
+    metrics:
+      tags:
+        application: ${spring.application.name}
+      distribution:
+        percentiles-histogram:
+          all: true
+          http.server.requests: true
     tracing:
-      endpoint: http://localhost:9941
+      sampling:
+        probability: 1.0
+    prometheus:
+      metrics:
+        export:
+          step: 10s
+    info:
+      env:
+        enabled: true
+      java:
+        enabled: true
+      os:
+        enabled: true
+resilience4j:
+  circuitbreaker:
+    instances:
+      authService:
+        slidingWindowSize: 10
+        permittedNumberOfCallsInHalfOpenState: 5
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10000
+        registerHealthIndicator: true
+      userService:
+        slidingWindowSize: 10
+        permittedNumberOfCallsInHalfOpenState: 5
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10000
+        registerHealthIndicator: true
+  timelimiter:
+    instances:
+      authService:
+        timeoutDuration: 3s
+      userService:
+        timeoutDuration: 3s
 
-#      routes:
-# todo need to find how to configure routes for gateway for many endpoints and services
+
 jwt:
   secret: 4jE4XcimwrEF9PUiOGaasXROjlw9zpkj5Hr59gojyiE6SMcxDBf9sJu/sCX/eazVrd+TyfYB/e8mz0NmgzuMNYmeb/Cw4aI1wOVgihSrVxT9erUXQXaGD8chY4wdWI9yaZOQKOdHcq8HTLYde3Xum34hgIMG3UJfHIfUNfL0a8Z6YiZGnuEnZrCsmMPTufN0o+pWQk5e7NI7fAgveTBvcV04oLJKK5sjky8a3N9rVPX2XZ6UOsG2n7Cvn/940dpy+DqRPBYCfagUyKNmakjAV2Desn7FkZ7dlGgsZGaWvXm3dhQ1l9TSdZTyx6QlLyaLB95pCDojfwaCYwKTEmj6
   expiration: 86400000
