@@ -1,5 +1,10 @@
 server:
   port: 9001
+
+logging:
+  pattern:
+    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
+
 spring:
   application:
     name: authentication-service
@@ -15,9 +20,37 @@ eureka:
       defaultZone: http://localhost:8761/eureka
 
 management:
-  zipkin:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+    endpoint:
+      health:
+        probes:
+          enabled: true
+        show-details: always
+        show-components: always
+    metrics:
+      tags:
+        application: ${spring.application.name}
+      distribution:
+        percentiles-histogram:
+          all: true
+          http.server.requests: true
     tracing:
-      endpoint: http://localhost:9941
+      sampling:
+        probability: 1.0
+    prometheus:
+      metrics:
+        export:
+          step: 10s
+    info:
+      env:
+        enabled: true
+      java:
+        enabled: true
+      os:
+        enabled: true
 
 jwt:
   secret: 4jE4XcimwrEF9PUiOGaasXROjlw9zpkj5Hr59gojyiE6SMcxDBf9sJu/sCX/eazVrd+TyfYB/e8mz0NmgzuMNYmeb/Cw4aI1wOVgihSrVxT9erUXQXaGD8chY4wdWI9yaZOQKOdHcq8HTLYde3Xum34hgIMG3UJfHIfUNfL0a8Z6YiZGnuEnZrCsmMPTufN0o+pWQk5e7NI7fAgveTBvcV04oLJKK5sjky8a3N9rVPX2XZ6UOsG2n7Cvn/940dpy+DqRPBYCfagUyKNmakjAV2Desn7FkZ7dlGgsZGaWvXm3dhQ1l9TSdZTyx6QlLyaLB95pCDojfwaCYwKTEmj6
