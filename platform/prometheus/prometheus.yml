@@ -20,3 +20,5 @@ scrape_configs:
     metrics_path: '/actuator/prometheus'
     static_configs:
       - targets: [ 'user-service:9001' ]
+
+#add other microservices?
